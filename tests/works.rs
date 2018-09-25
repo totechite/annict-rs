@@ -14,7 +14,7 @@ fn filter_title() {
 	let client = Client::set_token(env::var("annict_access_token").unwrap());
 	let works = annis::works().filter_title("lain").build();
 	let json = client.call(works).unwrap();
-	assert_eq!(json["works"][0]["title"], "serial experiments lain".to_string())
+	assert_eq!(json["works"][0]["title"], "serial experiments lain".to_string());
 }
 
 #[test]

@@ -7,7 +7,7 @@ use Service;
 
 #[derive(Debug)]
 pub struct Client {
-    pub token: Cow<'static, str>
+    pub token: String
 }
 
 impl Client {
@@ -16,7 +16,7 @@ impl Client {
 	where T: Into<Cow<'static, str>>
 	{
 		Client{
-			token: access_token.into()
+			token: access_token.into().into_owned()
 		}
 	}
 

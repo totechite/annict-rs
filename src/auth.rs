@@ -2,66 +2,68 @@ use std::borrow::Cow;
 use reqwest::{Client, Url};
 use serde_json::{Value};
 
-#[derive(Debug)]
-pub struct Auth {
-	client_id: Cow<'static, str>
+#[derive(Debug, Clone)]
+pub struct OAuth {
+	client_id: String
 }
 
 #[derive(Debug)]
-pub struct AuthUriBuilder {
-	client_id: Cow<'static, str>,
-	redirect_uri: Cow<'static, str>,
-	scope: Cow<'static, str>
+pub struct AuthorizeUrl{
+	client_id: String,
+	redirect_uri: String,
+	scope: String
 }
 
 #[derive(Debug)]
-pub struct TokenBuilder{
-	client_id: Cow<'static, str>,
-	client_secret: Cow<'static, str>,
-	redirect_uri: Cow<'static, str>,
-	code: Cow<'static, str>
+pub struct AccessToken{
+	client_id: String,
+	client_secret: String,
+	redirect_uri: String,
+	code: String
 }
 
-impl Auth{
+impl OAuth{
 
-	pub fn client_id<T>(client_id: T) -> Auth
-	where T: Into<Cow<'static, str>>
+	pub fn client_id<P>(client_id: P) -> OAuth
+		where P: Into<Cow<'static, str>>
 	{
-		Auth{
-			client_id: client_id.into()
+		OAuth{
+			client_id: client_id.into().to_string()
 		}
 	}
 
-	pub fn authorize(self) -> AuthUriBuilder{
-		AuthUriBuilder::new(self.client_id)
+	pub fn authorize_url(&self) -> AuthorizeUrl{
+		AuthorizeUrl::new(self.clone().client_id)
 	}
 
-	pub fn token(self) -> TokenBuilder{
-		TokenBuilder::new(self.client_id)
+	pub fn access_token(&self) -> AccessToken{
+		AccessToken::new(self.clone().client_id)
 	}
 
 }
 
-impl AuthUriBuilder {
+impl AuthorizeUrl{
 
-	fn new(client_id: Cow<'static, str>) -> Self{
-		AuthUriBuilder{
-			client_id: client_id.into(),
+	fn new(client_id: String) -> Self{
+		AuthorizeUrl{
+			client_id: client_id,
 			redirect_uri: "urn:ietf:wg:oauth:2.0:oob".into(),
 			scope: "read".into()
 		}
 	} 
 
-	pub fn redirect_uri<T>(&mut self, redirect_uri: T) ->  &mut Self
-		where T: Into<Cow<'static, str>> {
-			self.redirect_uri = redirect_uri.into();
-			self
+	pub fn redirect_uri<P>(&mut self, redirect_uri: P) ->  &mut Self
+		where P: Into<Cow<'static, str>>
+	{
+		self.redirect_uri = redirect_uri.into().to_string();
+		self
 	}
 
-	pub fn scope<T>(&mut self, scope: T) ->  &mut Self
-		where T: Into<Cow<'static, str>> {
-			self.scope = scope.into();
-			self
+	pub fn scope<P>(&mut self, scope: P) ->  &mut Self
+		where P: Into<Cow<'static, str>>
+	{
+		self.scope = scope.into().to_string();
+		self
 	}
 
 	pub fn build(&self) -> String{
@@ -70,10 +72,10 @@ impl AuthUriBuilder {
 
 }
 
-impl TokenBuilder {
+impl AccessToken {
     
-    fn new(client_id: Cow<'static, str>) -> Self{
-    	TokenBuilder{
+    fn new(client_id: String) -> Self{
+    	AccessToken{
     		client_id: client_id.into(),
     		client_secret: "".into(),
     		code: "".into(),
@@ -81,22 +83,25 @@ impl TokenBuilder {
     	}
     }
 
-	pub fn client_secret<T>(&mut self, client_secret: T) -> &mut Self
-		where T: Into<Cow<'static, str>> {
-			self.client_secret = client_secret.into();
-			self
+	pub fn client_secret<P>(&mut self, client_secret: P) -> &mut Self
+		where P: Into<Cow<'static, str>>
+	{
+		self.client_secret = client_secret.into().to_string();
+		self
 	}
 
-	pub fn code<T>(&mut self, code: T) -> &mut Self
-		where T: Into<Cow<'static, str>> {
-			self.code = code.into();
-			self
+	pub fn code<P>(&mut self, code: P) -> &mut Self
+		where P: Into<Cow<'static, str>>
+	{
+		self.code = code.into().to_string();
+		self
 	}
 
-	pub fn redirect_uri<T>(&mut self, redirect_uri: T) -> &mut Self
-		where T: Into<Cow<'static, str>> {
-			self.redirect_uri = redirect_uri.into();
-			self
+	pub fn redirect_uri<P>(&mut self, redirect_uri: P) -> &mut Self
+		where P: Into<Cow<'static, str>>
+	{
+		self.redirect_uri = redirect_uri.into().to_string();
+		self
 	}
 
 	pub fn build(&self) -> String{
