@@ -1,0 +1,13 @@
+[package]
+name = "annis"
+version = "0.0.1"
+authors = ["totechite <yutan.h9@gmail.com>"]
+description = "Annict API client library"
+keywords = ["annict", "anime", "api", "library"]
+repository = "https://github.com/totechite/annict-rs"
+documentation = "https://docs.rs/annis"
+license = "MIT"
+
+[dependencies]
+reqwest = "0.9.0"
+serde_json ="*"
