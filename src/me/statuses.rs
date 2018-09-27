@@ -8,9 +8,10 @@ pub struct MeStatuses {
 
 impl MeStatuses {
 
-    pub fn params(self, params: Vec<(&str, &str)>) -> Self 
+    pub fn params<K, V>(self, params: Vec<(K, V)>) -> Self
+     where K: Into<String>, V: Into<String>
     {
-        let params: Vec<(String, String)> = params.iter().map(|(k, v)|{(k.to_string(), v.to_string())}).collect();
+        let params: Vec<(String, String)> = params.into_iter().map(|(k, v)| (k.into(), v.into())).collect();
         Self{
             params: Some(params)
         }

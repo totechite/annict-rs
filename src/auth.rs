@@ -4,22 +4,22 @@ use serde_json::Value;
 
 #[derive(Debug, Clone)]
 pub struct OAuth {
-	client_id: String
+	pub client_id: String
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct AuthorizeUrl{
-	client_id: String,
-	redirect_uri: String,
-	scope: String
+	pub client_id: String,
+	pub redirect_uri: String,
+	pub scope: String
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct AccessToken{
-	client_id: String,
-	client_secret: String,
-	redirect_uri: String,
-	code: String
+	pub client_id: String,
+	pub client_secret: String,
+	pub redirect_uri: String,
+	pub code: String
 }
 
 impl OAuth{
