@@ -2,11 +2,11 @@ use reqwest::Client;
 use Service;
 
 #[derive(Debug, Default)]
-pub struct Records {
+pub struct MeWorks {
     pub params: Option<Vec<(String, String)>>
 }
 
-impl Records {
+impl MeWorks{
 
     pub fn params(self, params: Vec<(&str, &str)>) -> Self 
     {
@@ -15,11 +15,12 @@ impl Records {
             params: Some(params)
         }
     }
-    pub fn get(self) -> Service 
-    {
-    	Service{
-    		client: Client::new().get("https://api.annict.com/v1/records"),
-    		params: self.params
-    	}
+
+    pub fn get(self) -> Service {
+        Service{
+            client: Client::new().get("https://api.annict.com/v1/me/works"),
+            params: self.params
+        }
     }
+
 }

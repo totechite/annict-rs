@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 use reqwest::{Client, Url};
-use serde_json::{Value};
+use serde_json::Value;
 
 #[derive(Debug, Clone)]
 pub struct OAuth {
