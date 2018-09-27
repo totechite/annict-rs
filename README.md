@@ -1,14 +1,12 @@
-[![Build Status](https://travis-ci.com/totechite/annict-rs.svg?branch=master)](https://travis-ci.com/totechite/annict-rs)   
-
 annict-rs
 ==============
+[![Build Status](https://travis-ci.com/totechite/annict-rs.svg?branch=master)](https://travis-ci.com/totechite/annict-rs)   
 Annict API client library for Rust   
 
 [Annict API Official Document]("https://docs.annict.com/")   
 
 ToDo
 -------------
-- implement /v1/me/*. 
 - Make clearly understandable to Function and Variable Names. 
 
 
@@ -34,8 +32,8 @@ fn main(){
 	.build();
 
 
-	let client = Client::set_token(access_token);
-	let works = annis::works().filter_title("lain").build();
+	let client = Client::set_token("annict_access_token");
+	let works = annis::works().params(vec![("filter_title", "lain")]).get();
 
 	let json = client.call(works).unwrap();
 
@@ -43,7 +41,7 @@ fn main(){
 }
 ```
 
-Auth Requests is two ways that instant or manual.   
+Auth Requests were made two ways that methods or creating struct.   
 ```rust
 extern crate annis;
 use annis::{OAuth, AuthorizeUri, AccessToken};
@@ -52,13 +50,13 @@ use annis::{OAuth, AuthorizeUri, AccessToken};
 	let auth = OAuth::client_id("client_id");
 
 // Get Authorize URL
-	let instant = auth.authorize_url();
+	let instant = auth.authorize_url().build();
 
-	let manual = AuthorizeUri{
+	let manual = AuthorizeUrl{
 			client_id: "client_id".to_string(),
 			redirect_uri: "urn:ietf:wg:oauth:2.0:oob".to_string(),
 			scope: "read".to_string()
-		}
+		}.build();
 
 	assert_eq!(instant, manual);
 
@@ -72,13 +70,12 @@ use annis::{OAuth, AuthorizeUri, AccessToken};
 
     let manual = AccessToken{
     		client_id: "client_id".to_string(),
-    		client_secret: "client_secret_key"to_string(),
+    		client_secret: "client_secret_key".to_string(),
     		code: "certification code".to_string(),
     		redirect_uri: "urn:ietf:wg:oauth:2.0:oob".into()
-    	}
+    	}.build();
 
 	assert_eq!(instant, manual);
-
 ```
 
 License
