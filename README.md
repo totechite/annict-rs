@@ -3,7 +3,7 @@ annict-rs
 [![Build Status](https://travis-ci.com/totechite/annict-rs.svg?branch=master)](https://travis-ci.com/totechite/annict-rs)   
 Annict API client library for Rust   
 
-[Annict API Official Document]("https://docs.annict.com/")   
+[Annict API Official Document](https://docs.annict.com/)   
 
 ToDo
 -------------
