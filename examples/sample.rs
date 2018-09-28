@@ -1,6 +1,5 @@
 extern crate annis;
-extern crate serde_json;
-use annis::{Client};
+use annis::{Client, Methods};
 use std::env;
 
 fn main() -> Result<(), String>{
@@ -10,7 +9,7 @@ fn main() -> Result<(), String>{
 	);
 
 	let params = vec![("filter_title", "lain"),("fields","title")];
-    let works = annis::works().params(params).get();
+    let works = annis::works().params(params);
 
 	let json = client.call(works)?;
 	

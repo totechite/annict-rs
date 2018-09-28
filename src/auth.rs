@@ -44,7 +44,7 @@ impl OAuth{
 
 impl AuthorizeUrl{
 
-	fn new(client_id: String) -> Self{
+	pub fn new(client_id: String) -> Self{
 		AuthorizeUrl{
 			client_id: client_id,
 			redirect_uri: "urn:ietf:wg:oauth:2.0:oob".into(),
@@ -74,7 +74,7 @@ impl AuthorizeUrl{
 
 impl AccessToken {
     
-    fn new(client_id: String) -> Self{
+    pub fn new(client_id: String) -> Self{
     	AccessToken{
     		client_id: client_id.into(),
     		client_secret: "".into(),
