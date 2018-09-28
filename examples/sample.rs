@@ -1,5 +1,5 @@
 extern crate annis;
-use annis::{Client, Methods};
+use annis::Client;
 use std::env;
 
 fn main() -> Result<(), String>{
