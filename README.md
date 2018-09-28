@@ -33,7 +33,7 @@ fn main(){
 
 
 	let client = Client::set_token("annict_access_token");
-	let works = annis::works().params(vec![("filter_title", "lain")]).get();
+	let works = annis::works().params(vec![("filter_title", "lain")]);
 
 	let json = client.call(works).unwrap();
 
