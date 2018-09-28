@@ -39,20 +39,52 @@ impl OAuth{
 		}
 	}
 
-	pub fn info<A>() -> Service 
-		where A: Into<String>
-	{
+/// Request to /oauth/token/info
+///
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::{Client, OAuth};
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let info = OAuth::info();
+///
+/// client.call(info)?;
+/// # Ok(())
+/// # }
+/// ```
+
+	pub fn info() -> Service {
 		Service{
 			client: Client::new().get("https://api.annict.com/oauth/token/info"),
 			params: None
 		}
 	}
 
+/// Request to /oauth/revoke
+///
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::{Client, OAuth};
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let revoke = OAuth::revoke("revoke_access_token");
+///
+/// client.call(revoke)?;
+/// # Ok(())
+/// # }
+/// ```
+
 	pub fn revoke<A>(access_token: A) -> Service 
 		where A: Into<String>
 	{
 		Service{
-			client: Client::new().post("https://api.annict.com/oauth/token/info"),
+			client: Client::new().post("https://api.annict.com/oauth/revoke"),
 			params: Some(vec![("token".to_string(), access_token.into())])
 		}
 	}
