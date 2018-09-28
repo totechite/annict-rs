@@ -4,9 +4,10 @@
 //! =====
 //! 
 //! The `annis` is a Rust interface to the Annict API.
-//! 
+//! [Annict API Official Document](https://docs.annict.com/)
+//!
 //! Request to /v1/works
-//! -------------
+//! --------------------
 //! 
 //! ```rust
 //! # extern crate annis;
@@ -74,6 +75,8 @@ pub enum Method{
 	Delete
 }
 
+/// Request to /v1/works
+/// 
 /// Examples
 /// ========
 /// ```rust
@@ -84,7 +87,7 @@ pub enum Method{
 ///
 /// let works = annis::works().params(vec![("filter_title", "lain")]);
 ///
-/// let json = client.call(works)?;
+/// client.call(works)?;
 /// # Ok(())
 /// # }
 /// ```
@@ -98,6 +101,8 @@ pub fn works() -> Service {
 
 }
 
+/// Request to /v1/episodes
+///
 /// Examples
 /// ========
 /// ```rust
@@ -108,7 +113,7 @@ pub fn works() -> Service {
 ///
 /// let episodes = annis::episodes().params(vec![("filter_work_id", "2274")]);
 ///
-/// let json = client.call(episodes)?;	
+/// client.call(episodes)?;	
 /// # Ok(())
 /// # }
 /// ```
@@ -122,6 +127,8 @@ pub fn episodes() -> Service {
 
 }
 
+/// Request to /v1/records
+///
 /// Examples
 /// ========
 /// ```rust
@@ -132,7 +139,7 @@ pub fn episodes() -> Service {
 ///
 /// let records = annis::records().params(vec![("fields", "title")]);
 ///
-/// let json = client.call(records)?;
+/// client.call(records)?;
 /// # Ok(())
 /// # }
 /// ```
@@ -146,6 +153,8 @@ pub fn records() -> Service {
 
 }
 
+/// Request to /v1/me/statuses
+///
 /// Examples
 /// ========
 /// ```rust
@@ -170,8 +179,11 @@ pub fn me_statuses() -> Service {
 
 }
 
+/// Request to /v1/me/records
+///
 /// Examples
 /// ========
+/// POST
 /// ```rust
 /// # use annis::{Client, Method};
 /// #
@@ -184,6 +196,7 @@ pub fn me_statuses() -> Service {
 /// # Ok(())
 /// # }
 /// ```
+/// PATCH
 /// ```rust
 /// # use annis::{Client, Method};
 /// #
@@ -212,6 +225,8 @@ pub fn me_records(method: Method, id: usize) -> Service {
 
 }
 
+/// Request to /v1/me/works
+///
 /// Examples
 /// ========
 /// ```rust
@@ -219,7 +234,9 @@ pub fn me_records(method: Method, id: usize) -> Service {
 /// #
 /// # fn run() -> Result<(), String> {
 /// let client = Client::set_token("annict_access_token");
+///
 /// let me_works = annis::me_works().params(vec![("filter_title","機動戦士ガンダムUC")]);
+///
 /// client.call(me_works)?;
 /// # Ok(())
 /// # }
@@ -234,6 +251,8 @@ pub fn me_works() -> Service {
 
 }
 
+/// Request to /v1/me/programs
+///
 /// Examples
 /// ========
 /// ```rust
@@ -241,7 +260,9 @@ pub fn me_works() -> Service {
 /// #
 /// # fn run() -> Result<(), String> {
 /// let client = Client::set_token("annict_access_token");
+///
 /// let episodes = annis::me_programs();
+///
 /// client.call(episodes)?;
 /// # Ok(())
 /// # }
