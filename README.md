@@ -20,7 +20,7 @@ extern crate annis;
 Example code that request to /v1/works.   
 ```rust
 extern crate annis;
-use annis::{Auth, Client};
+use annis::{OAuth, Client};
 
 fn main(){
 
