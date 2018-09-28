@@ -5,11 +5,19 @@ Annict API client library for Rust
 
 [Annict API Official Document](https://docs.annict.com/)   
 
-
 Usage
 --------------
+Add this to your `Cargo.toml`:   
+```toml
+[dependencies]
+annis = "0.0.1"
+```
+and this to your crate root:   
+```rust
+extern crate annis;
+```
 
-Request to /v1/works.   
+Example code that request to /v1/works.   
 ```rust
 extern crate annis;
 use annis::{Auth, Client};
