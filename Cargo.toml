@@ -3,11 +3,16 @@ name = "annis"
 version = "0.0.1"
 authors = ["totechite <yutan.h9@gmail.com>"]
 description = "Annict API client library"
-keywords = ["annict", "anime", "api", "library", "web"]
-repository = "https://github.com/totechite/annict-rs"
 documentation = "https://docs.rs/annis"
+repository = "https://github.com/totechite/annict-rs"
+keywords = ["annict", "anime", "api", "library", "web"]
+categories = ["api-bindings"]
 license = "MIT"
+readme = "README.md"
+
+[badges]
+travis-ci = { repository = "totechite/annict-rs" }
 
 [dependencies]
-reqwest = "0.9.0"
+reqwest = "0.9.2"
 serde_json ="*"
