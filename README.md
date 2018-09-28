@@ -5,10 +5,6 @@ Annict API client library for Rust
 
 [Annict API Official Document](https://docs.annict.com/)   
 
-ToDo
--------------
-- Make clearly understandable to Function and Variable Names. 
-
 
 Usage
 --------------
