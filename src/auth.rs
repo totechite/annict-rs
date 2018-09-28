@@ -1,11 +1,16 @@
-use std::borrow::Cow;
 use reqwest::{Client, Url};
 use serde_json::Value;
+use Service;
+
+
+/// A make request to autholize.
 
 #[derive(Debug, Clone)]
 pub struct OAuth {
 	pub client_id: String
 }
+
+/// To make Authorize URL.
 
 #[derive(Debug, PartialEq)]
 pub struct AuthorizeUrl{
@@ -13,6 +18,8 @@ pub struct AuthorizeUrl{
 	pub redirect_uri: String,
 	pub scope: String
 }
+
+/// A request to get Annict access token.
 
 #[derive(Debug, PartialEq)]
 pub struct AccessToken{
@@ -25,10 +32,28 @@ pub struct AccessToken{
 impl OAuth{
 
 	pub fn client_id<P>(client_id: P) -> OAuth
-		where P: Into<Cow<'static, str>>
+		where P: Into<String>
 	{
 		OAuth{
-			client_id: client_id.into().to_string()
+			client_id: client_id.into()
+		}
+	}
+
+	pub fn info<A>() -> Service 
+		where A: Into<String>
+	{
+		Service{
+			client: Client::new().get("https://api.annict.com/oauth/token/info"),
+			params: None
+		}
+	}
+
+	pub fn revoke<A>(access_token: A) -> Service 
+		where A: Into<String>
+	{
+		Service{
+			client: Client::new().post("https://api.annict.com/oauth/token/info"),
+			params: Some(vec![("token".to_string(), access_token.into())])
 		}
 	}
 
@@ -53,16 +78,16 @@ impl AuthorizeUrl{
 	} 
 
 	pub fn redirect_uri<P>(&mut self, redirect_uri: P) ->  &mut Self
-		where P: Into<Cow<'static, str>>
+		where P: Into<String>
 	{
-		self.redirect_uri = redirect_uri.into().to_string();
+		self.redirect_uri = redirect_uri.into();
 		self
 	}
 
 	pub fn scope<P>(&mut self, scope: P) ->  &mut Self
-		where P: Into<Cow<'static, str>>
+		where P: Into<String>
 	{
-		self.scope = scope.into().to_string();
+		self.scope = scope.into();
 		self
 	}
 
@@ -84,23 +109,23 @@ impl AccessToken {
     }
 
 	pub fn client_secret<P>(&mut self, client_secret: P) -> &mut Self
-		where P: Into<Cow<'static, str>>
+		where P: Into<String>
 	{
-		self.client_secret = client_secret.into().to_string();
+		self.client_secret = client_secret.into();
 		self
 	}
 
 	pub fn code<P>(&mut self, code: P) -> &mut Self
-		where P: Into<Cow<'static, str>>
+		where P: Into<String>
 	{
-		self.code = code.into().to_string();
+		self.code = code.into();
 		self
 	}
 
 	pub fn redirect_uri<P>(&mut self, redirect_uri: P) -> &mut Self
-		where P: Into<Cow<'static, str>>
+		where P: Into<String>
 	{
-		self.redirect_uri = redirect_uri.into().to_string();
+		self.redirect_uri = redirect_uri.into();
 		self
 	}
 
