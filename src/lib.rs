@@ -66,11 +66,28 @@ impl Service {
 
 }
 
-pub enum Methods{
-	Create,
+/// A type of argument for me_records().
+
+pub enum Method{
+	Post,
 	Patch,
 	Delete
 }
+
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let works = annis::works().params(vec![("filter_title", "lain")]);
+///
+/// let json = client.call(works)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn works() -> Service {
 
@@ -81,6 +98,21 @@ pub fn works() -> Service {
 
 }
 
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let episodes = annis::episodes().params(vec![("filter_work_id", "2274")]);
+///
+/// let json = client.call(episodes)?;	
+/// # Ok(())
+/// # }
+/// ```
+
 pub fn episodes() -> Service {
 
 	Service{
@@ -89,6 +121,21 @@ pub fn episodes() -> Service {
 	}
 
 }
+
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let records = annis::records().params(vec![("fields", "title")]);
+///
+/// let json = client.call(records)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn records() -> Service {
 
@@ -99,6 +146,21 @@ pub fn records() -> Service {
 
 }
 
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let statuses = annis::me_statuses().params(vec![("work_id", "3994"), ("kind", "watched")]);
+///
+/// client.call(statuses)?;	
+/// # Ok(())
+/// # }
+/// ```
+
 pub fn me_statuses() -> Service {
 
 	Service{
@@ -108,12 +170,39 @@ pub fn me_statuses() -> Service {
 
 }
 
-pub fn me_records(method: Methods, id: usize) -> Service {
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::{Client, Method};
+/// #
+/// # fn post() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let records = annis::me_records(Method::Post, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
+///
+/// client.call(records)?;
+/// # Ok(())
+/// # }
+/// ```
+/// ```rust
+/// # use annis::{Client, Method};
+/// #
+/// # fn patch() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let records = annis::me_records(Method::Patch, 1838569).params(vec![("rating", "5")]);
+///
+/// client.call(records)?;
+/// # Ok(())
+/// # }
+/// ```
 
-	let (client, params) = match method {
-		Methods::Create => (reqwest::Client::new().post("https://api.annict.com/v1/me/records"), Some(vec![("episodes_id".to_string(), id.to_string())])),
-		Methods::Patch  => (reqwest::Client::new().patch(format!("https://api.annict.com/v1/me/records/{}", id).as_str()), None),
-		Methods::Delete => (reqwest::Client::new().delete(format!("https://api.annict.com/v1/me/records/{}", id).as_str()), None),
+pub fn me_records(method: Method, id: usize) -> Service {
+
+	let (client, params): (RequestBuilder, Option<Vec<(String, String)>>) = match method {
+		Method::Post => (reqwest::Client::new().post("https://api.annict.com/v1/me/records"), Some(vec![("episodes_id".to_string(), id.to_string())])),
+		Method::Patch  => (reqwest::Client::new().patch(format!("https://api.annict.com/v1/me/records/{}", id).as_str()), None),
+		Method::Delete => (reqwest::Client::new().delete(format!("https://api.annict.com/v1/me/records/{}", id).as_str()), None),
 	};
 
 	Service{
@@ -123,6 +212,19 @@ pub fn me_records(method: Methods, id: usize) -> Service {
 
 }
 
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+/// let me_works = annis::me_works().params(vec![("filter_title","機動戦士ガンダムUC")]);
+/// client.call(me_works)?;
+/// # Ok(())
+/// # }
+/// ```
+
 pub fn me_works() -> Service {
 
 	Service{
@@ -131,6 +233,19 @@ pub fn me_works() -> Service {
 	}
 
 }
+
+/// Examples
+/// ========
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+/// let episodes = annis::me_programs();
+/// client.call(episodes)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn me_programs() -> Service {
 
