@@ -5,7 +5,7 @@ Annict API client library for Rust.
 - [Annict API Official Document](https://docs.annict.com/)
 
 
-Annict is a Web service to manage watching annimes.   
+Annict is a Web service to make and manage watching annime life.   
 - [Annict](https://annict.com) 
 - [Annict's Github Account](https://github.com/annict)  
 
@@ -29,7 +29,7 @@ use annis::{OAuth, Client};
 fn main(){
 
 	let auth = OAuth::client_id("client_id");
-	let uri = &auth.authorize_url().redirect_uri("https://example.com").scope("read+write").build();
+	let url = &auth.authorize_url().redirect_uri("https://example.com").scope("read+write").build();
 
 	// -> Browser access to this uri and Get a certification code.
 
@@ -40,7 +40,7 @@ fn main(){
 	.build();
 
 
-	let client = Client::set_token("annict_access_token");
+	let client = Client::set_token(access_token);
 	let works = annis::works().params(vec![("filter_title", "lain")]);
 
 	let json = client.call(works).unwrap();
