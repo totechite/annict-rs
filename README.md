@@ -1,13 +1,18 @@
 annict-rs
 ==============
-[![Build Status](https://travis-ci.com/totechite/annict-rs.svg?branch=master)](https://travis-ci.com/totechite/annict-rs)   
+[![Build Status](https://travis-ci.com/totechite/annict-rs.svg?branch=master)](https://travis-ci.com/totechite/annict-rs)
+[![Build status](https://ci.appveyor.com/api/projects/status/f39tjurl4m7ggkch?svg=true)](https://ci.appveyor.com/project/totechite/annict-rs)
+[![crates.io](https://img.shields.io/crates/v/annis.svg)](https://crates.io/crates/annis)     
+
 Annict API client library for Rust. 
+
 - [Annict API Official Document](https://docs.annict.com/)
 
 
 Annict is a Web service to make and manage watching annime life.   
 - [Annict](https://annict.com) 
 - [Annict's Github Account](https://github.com/annict)  
+
 
 Usage
 --------------
@@ -49,6 +54,7 @@ fn main(){
 }
 ```
 
+
 Auth Requests were made two ways that methods or creating struct.   
 ```rust
 extern crate annis;
@@ -85,6 +91,7 @@ use annis::{OAuth, AuthorizeUri, AccessToken};
 
 	assert_eq!(instant, manual);
 ```
+
 
 License
 ----------------------------
