@@ -2,13 +2,13 @@
 
 //! annis
 //! =====
-//! 
+//!
 //! The `annis` is a Rust interface to the Annict API.
 //! [Annict API Official Document](https://docs.annict.com/)
 //!
 //! Request to /v1/works
 //! --------------------
-//! 
+//!
 //! ```rust
 //! # extern crate annis;
 //! # use annis::Client;
@@ -17,12 +17,12 @@
 //! # fn main() -> Result<(), String>{
 //! #
 //! let client = Client::set_token("annict_access_token");
-//! 
+//!
 //! let params = vec![("filter_title", "lain"),("fields","title")];
 //! let works = annis::works().params(params);
-//! 
+//!
 //! let json = client.call(works)?;
-//! 
+//!
 //! println!("{:?}", json["works"]);
 //! #
 //! #   Ok(())  
@@ -32,13 +32,12 @@
 extern crate reqwest;
 use reqwest::RequestBuilder;
 extern crate serde_json;
-mod client;
 mod auth;
+mod client;
 
-pub use serde_json::Value;
-pub use client::Client;
 pub use auth::*;
-
+pub use client::Client;
+pub use serde_json::Value;
 
 /// A Service to make request to endpoint.
 ///
@@ -47,36 +46,39 @@ pub use auth::*;
 #[derive(Debug)]
 pub struct Service {
     pub client: RequestBuilder,
-    pub params: Option<Vec<(String, String)>>
+    pub params: Option<Vec<(String, String)>>,
 }
 
 impl Service {
-
     pub fn params<K, V>(self, params: Vec<(K, V)>) -> Self
-    	where K: Into<String>, V: Into<String>
+    where
+        K: Into<String>,
+        V: Into<String>,
     {
-        let mut params: Vec<(String, String)> = params.into_iter().map(|(k, v)| (k.into(), v.into())).collect();
-        if let Some(mut x) = self.params{
-        	params.append(&mut x);
+        let mut params: Vec<(String, String)> = params
+            .into_iter()
+            .map(|(k, v)| (k.into(), v.into()))
+            .collect();
+        if let Some(mut x) = self.params {
+            params.append(&mut x);
         };
-        Self{
+        Self {
             params: Some(params),
             ..self
         }
     }
-
 }
 
 /// A type of argument for me_records().
 
-pub enum Method{
-	Post,
-	Patch,
-	Delete
+pub enum Method {
+    Post,
+    Patch,
+    Delete,
 }
 
 /// Request to /v1/works
-/// 
+///
 /// Examples
 /// ========
 /// ```rust
@@ -93,12 +95,10 @@ pub enum Method{
 /// ```
 
 pub fn works() -> Service {
-
-	Service{
-		client: reqwest::Client::new().get("https://api.annict.com/v1/works"),
-		params: None
-	}
-
+    Service {
+        client: reqwest::Client::new().get("https://api.annict.com/v1/works"),
+        params: None,
+    }
 }
 
 /// Request to /v1/episodes
@@ -113,18 +113,16 @@ pub fn works() -> Service {
 ///
 /// let episodes = annis::episodes().params(vec![("filter_work_id", "2274")]);
 ///
-/// client.call(episodes)?;	
+/// client.call(episodes)?;
 /// # Ok(())
 /// # }
 /// ```
 
 pub fn episodes() -> Service {
-
-	Service{
-		client: reqwest::Client::new().get("https://api.annict.com/v1/episodes"),
-		params: None
-	}
-
+    Service {
+        client: reqwest::Client::new().get("https://api.annict.com/v1/episodes"),
+        params: None,
+    }
 }
 
 /// Request to /v1/records
@@ -145,12 +143,10 @@ pub fn episodes() -> Service {
 /// ```
 
 pub fn records() -> Service {
-
-	Service{
-		client: reqwest::Client::new().get("https://api.annict.com/v1/records"),
-		params: None
-	}
-
+    Service {
+        client: reqwest::Client::new().get("https://api.annict.com/v1/records"),
+        params: None,
+    }
 }
 
 /// Request to /v1/me/statuses
@@ -165,18 +161,16 @@ pub fn records() -> Service {
 ///
 /// let statuses = annis::me_statuses().params(vec![("work_id", "3994"), ("kind", "watched")]);
 ///
-/// client.call(statuses)?;	
+/// client.call(statuses)?;
 /// # Ok(())
 /// # }
 /// ```
 
 pub fn me_statuses() -> Service {
-
-	Service{
-		client: reqwest::Client::new().post("https://api.annict.com/v1/me/statuses"),
-		params: None
-	}
-
+    Service {
+        client: reqwest::Client::new().post("https://api.annict.com/v1/me/statuses"),
+        params: None,
+    }
 }
 
 /// Request to /v1/me/records
@@ -211,18 +205,27 @@ pub fn me_statuses() -> Service {
 /// ```
 
 pub fn me_records(method: Method, id: usize) -> Service {
+    let (client, params): (RequestBuilder, Option<Vec<(String, String)>>) = match method {
+        Method::Post => (
+            reqwest::Client::new().post("https://api.annict.com/v1/me/records"),
+            Some(vec![("episodes_id".to_string(), id.to_string())]),
+        ),
+        Method::Patch => (
+            reqwest::Client::new()
+                .patch(format!("https://api.annict.com/v1/me/records/{}", id).as_str()),
+            None,
+        ),
+        Method::Delete => (
+            reqwest::Client::new()
+                .delete(format!("https://api.annict.com/v1/me/records/{}", id).as_str()),
+            None,
+        ),
+    };
 
-	let (client, params): (RequestBuilder, Option<Vec<(String, String)>>) = match method {
-		Method::Post => (reqwest::Client::new().post("https://api.annict.com/v1/me/records"), Some(vec![("episodes_id".to_string(), id.to_string())])),
-		Method::Patch  => (reqwest::Client::new().patch(format!("https://api.annict.com/v1/me/records/{}", id).as_str()), None),
-		Method::Delete => (reqwest::Client::new().delete(format!("https://api.annict.com/v1/me/records/{}", id).as_str()), None),
-	};
-
-	Service{
-		client: client,
-		params: params
-	}
-
+    Service {
+        client: client,
+        params: params,
+    }
 }
 
 /// Request to /v1/me/works
@@ -243,12 +246,10 @@ pub fn me_records(method: Method, id: usize) -> Service {
 /// ```
 
 pub fn me_works() -> Service {
-
-	Service{
-		client: reqwest::Client::new().get("https://api.annict.com/v1/me/works"),
-		params: None
-	}
-
+    Service {
+        client: reqwest::Client::new().get("https://api.annict.com/v1/me/works"),
+        params: None,
+    }
 }
 
 /// Request to /v1/me/programs
@@ -269,10 +270,8 @@ pub fn me_works() -> Service {
 /// ```
 
 pub fn me_programs() -> Service {
-
-	Service{
-		client: reqwest::Client::new().get("https://api.annict.com/v1/me/programs"),
-		params: None
-	}
-
+    Service {
+        client: reqwest::Client::new().get("https://api.annict.com/v1/me/programs"),
+        params: None,
+    }
 }
