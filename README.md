@@ -9,7 +9,7 @@ Annict API client library for Rust.
 - [Annict API Official Document](https://docs.annict.com/)
 
 
-Annict is a Web service to make and manage watching annime life.   
+Annict is a web service to make and manage watching anime life.   
 - [Annict](https://annict.com) 
 - [Annict's Github Account](https://github.com/annict)  
 
