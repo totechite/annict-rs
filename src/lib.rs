@@ -31,7 +31,14 @@
 
 extern crate reqwest;
 use reqwest::RequestBuilder;
+use std::fmt;
+#[macro_use]
+extern crate serde_derive;
+
+extern crate serde;
 extern crate serde_json;
+extern crate serde_yaml;
+
 mod auth;
 mod client;
 
@@ -44,27 +51,27 @@ pub use serde_json::Value;
 ///
 
 #[derive(Debug)]
-pub struct Service {
+pub struct Service<P> {
     pub client: RequestBuilder,
-    pub params: Option<Vec<(String, String)>>,
+    pub params: Option<Vec<(P, String)>>,
 }
 
-impl Service {
-    pub fn params<K, V>(self, params: Vec<(K, V)>) -> Self
+impl<P: Into<String>> Service<P> {
+    pub fn params<K, V>(self, params: Vec<(K, V)>) -> Service<P>
     where
-        K: Into<String>,
+        K: Into<P>,
         V: Into<String>,
     {
-        let mut params: Vec<(String, String)> = params
+        let mut params: Vec<(P, String)> = params
             .into_iter()
             .map(|(k, v)| (k.into(), v.into()))
             .collect();
         if let Some(mut x) = self.params {
             params.append(&mut x);
         };
-        Self {
+        Service {
+            client: self.client,
             params: Some(params),
-            ..self
         }
     }
 }
@@ -94,7 +101,7 @@ pub enum Method {
 /// # }
 /// ```
 
-pub fn works() -> Service {
+pub fn works() -> Service<Works> {
     Service {
         client: reqwest::Client::new().get("https://api.annict.com/v1/works"),
         params: None,
@@ -118,7 +125,7 @@ pub fn works() -> Service {
 /// # }
 /// ```
 
-pub fn episodes() -> Service {
+pub fn episodes() -> Service<Episodes> {
     Service {
         client: reqwest::Client::new().get("https://api.annict.com/v1/episodes"),
         params: None,
@@ -142,7 +149,7 @@ pub fn episodes() -> Service {
 /// # }
 /// ```
 
-pub fn records() -> Service {
+pub fn records() -> Service<Records> {
     Service {
         client: reqwest::Client::new().get("https://api.annict.com/v1/records"),
         params: None,
@@ -166,7 +173,7 @@ pub fn records() -> Service {
 /// # }
 /// ```
 
-pub fn me_statuses() -> Service {
+pub fn me_statuses() -> Service<MeStatuses> {
     Service {
         client: reqwest::Client::new().post("https://api.annict.com/v1/me/statuses"),
         params: None,
@@ -204,11 +211,11 @@ pub fn me_statuses() -> Service {
 /// # }
 /// ```
 
-pub fn me_records(method: Method, id: usize) -> Service {
-    let (client, params): (RequestBuilder, Option<Vec<(String, String)>>) = match method {
+pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
+    let (client, params): (RequestBuilder, Option<Vec<(MeRecords, String)>>) = match method {
         Method::Post => (
             reqwest::Client::new().post("https://api.annict.com/v1/me/records"),
-            Some(vec![("episodes_id".to_string(), id.to_string())]),
+            Some(vec![(MeRecords::episode_id, id.to_string())]),
         ),
         Method::Patch => (
             reqwest::Client::new()
@@ -245,7 +252,7 @@ pub fn me_records(method: Method, id: usize) -> Service {
 /// # }
 /// ```
 
-pub fn me_works() -> Service {
+pub fn me_works() -> Service<MeWorks> {
     Service {
         client: reqwest::Client::new().get("https://api.annict.com/v1/me/works"),
         params: None,
@@ -262,16 +269,193 @@ pub fn me_works() -> Service {
 /// # fn run() -> Result<(), String> {
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let episodes = annis::me_programs();
+/// let programs = annis::me_programs();
 ///
-/// client.call(episodes)?;
+/// client.call(programs)?;
 /// # Ok(())
 /// # }
 /// ```
 
-pub fn me_programs() -> Service {
+pub fn me_programs() -> Service<MePrograms> {
     Service {
         client: reqwest::Client::new().get("https://api.annict.com/v1/me/programs"),
         params: None,
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum Works {
+    fields,
+    filter_ids,
+    filter_season,
+    filter_title,
+    page,
+    per_page,
+    sort_id,
+    sort_season,
+    sort_watchers_count,
+}
+
+impl From<Works> for String {
+    fn from(p: Works) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Works {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).expect("err")
+    }
+}
+
+impl fmt::Display for Works {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum Episodes {
+    fields,
+    filter_ids,
+    filter_work_id,
+    page,
+    per_page,
+    sort_id,
+    sort_sort_number,
+}
+
+impl From<Episodes> for String {
+    fn from(p: Episodes) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Episodes {
+    fn from(p: &'static str) -> Episodes {
+        serde_yaml::from_str(p).expect("err")
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum Records {
+    fields,
+    filter_ids,
+    filter_episode_id,
+    page,
+    per_page,
+    sort_id,
+    sort_likes_count,
+}
+
+impl From<Records> for String {
+    fn from(p: Records) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Records {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).expect("err")
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum MeStatuses {
+    work_id,
+    kind,
+}
+
+impl From<MeStatuses> for String {
+    fn from(p: MeStatuses) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for MeStatuses {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).expect("err")
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum MeRecords {
+    episode_id,
+    comment,
+    rating,
+    share_twitter,
+    share_facebook,
+}
+
+impl From<MeRecords> for String {
+    fn from(p: MeRecords) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for MeRecords {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).expect("err")
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum MeWorks {
+    fields,
+    filter_ids,
+    filter_season,
+    filter_title,
+    filter_status,
+    page,
+    per_page,
+    sort_id,
+    sort_season,
+    sort_watchers_count,
+}
+
+impl From<MeWorks> for String {
+    fn from(p: MeWorks) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for MeWorks {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap()
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum MePrograms {
+    fields,
+    filter_ids,
+    filter_channel_ids,
+    filter_work_ids,
+    filter_started_at_gt,
+    filter_started_at_lt,
+    filter_unwatched,
+    filter_rebroadcast,
+    page,
+    per_page,
+    sort_id,
+    sort_started_at,
+}
+
+impl From<MePrograms> for String {
+    fn from(p: MePrograms) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for MePrograms {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap()
     }
 }
