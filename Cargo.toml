@@ -1,6 +1,6 @@
 [package]
 name = "annis"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["totechite <yutan.h9@gmail.com>"]
 description = "Annict API client library"
 documentation = "https://docs.rs/annis"
@@ -11,8 +11,12 @@ license = "MIT"
 readme = "README.md"
 
 [badges]
-travis-ci = { repository = "totechite/annict-rs" }
+appveyor = { repository = "annict-rs", branch = "master", service = "github" }
+travis-ci = { repository = "totechite/annict-rs", branch = "master" }
 
 [dependencies]
 reqwest = "0.9.2"
-serde_json ="1.0"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+serde_yaml = "0.8"
