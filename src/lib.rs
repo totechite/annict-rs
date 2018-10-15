@@ -11,14 +11,14 @@
 //!
 //! ```rust
 //! # extern crate annis;
-//! # use annis::Client;
+//! # use annis::{Client, Works};
 //! # use std::env;
 //! #
 //! # fn main() -> Result<(), String>{
 //! #
 //! let client = Client::set_token("annict_access_token");
 //!
-//! let params = vec![("filter_title", "lain"),("fields","title")];
+//! let params = vec![(Works::filter_title, "lain"),(Works::fields,"title")];
 //! let works = annis::works().params(params);
 //!
 //! let json = client.call(works)?;
@@ -56,7 +56,7 @@ pub struct Service<P> {
     pub params: Option<Vec<(P, String)>>,
 }
 
-impl<P: Into<String>> Service<P> {
+impl<P: Into<String> + std::cmp::PartialEq + IsValid> Service<P> {
     pub fn params<K, V>(self, params: Vec<(K, V)>) -> Service<P>
     where
         K: Into<P>,
@@ -65,6 +65,7 @@ impl<P: Into<String>> Service<P> {
         let mut params: Vec<(P, String)> = params
             .into_iter()
             .map(|(k, v)| (k.into(), v.into()))
+            .filter(|(k, _)| k.is_valid())
             .collect();
         if let Some(mut x) = self.params {
             params.append(&mut x);
@@ -85,7 +86,7 @@ pub enum Method {
 }
 
 /// Request to /v1/works
-///
+/// 
 /// Examples
 /// ========
 /// ```rust
@@ -283,8 +284,15 @@ pub fn me_programs() -> Service<MePrograms> {
     }
 }
 
+pub trait IsValid {
+    fn is_valid(&self) -> bool;
+}
+
+/// /v1/works assepts parameters.
+/// 
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum Works {
     fields,
     filter_ids,
@@ -295,6 +303,13 @@ pub enum Works {
     sort_id,
     sort_season,
     sort_watchers_count,
+    Invalid,
+}
+
+impl IsValid for Works {
+    fn is_valid(&self) -> bool {
+        *self != Works::Invalid
+    }
 }
 
 impl From<Works> for String {
@@ -305,7 +320,13 @@ impl From<Works> for String {
 
 impl From<&'static str> for Works {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).expect("err")
+        serde_yaml::from_str(p).unwrap_or(Works::Invalid)
+    }
+}
+
+impl From<String> for Works {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Works::Invalid)
     }
 }
 
@@ -315,8 +336,10 @@ impl fmt::Display for Works {
     }
 }
 
+/// /v1/episodes assepts parameters.
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum Episodes {
     fields,
     filter_ids,
@@ -325,6 +348,13 @@ pub enum Episodes {
     per_page,
     sort_id,
     sort_sort_number,
+    Invalid,
+}
+
+impl IsValid for Episodes {
+    fn is_valid(&self) -> bool {
+        *self != Episodes::Invalid
+    }
 }
 
 impl From<Episodes> for String {
@@ -335,12 +365,26 @@ impl From<Episodes> for String {
 
 impl From<&'static str> for Episodes {
     fn from(p: &'static str) -> Episodes {
-        serde_yaml::from_str(p).expect("err")
+        serde_yaml::from_str(p).unwrap_or(Episodes::Invalid)
     }
 }
 
+impl From<String> for Episodes {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Episodes::Invalid)
+    }
+}
+
+impl fmt::Display for Episodes {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// /v1/records assepts parameters.
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum Records {
     fields,
     filter_ids,
@@ -349,6 +393,13 @@ pub enum Records {
     per_page,
     sort_id,
     sort_likes_count,
+    Invalid,
+}
+
+impl IsValid for Records {
+    fn is_valid(&self) -> bool {
+        *self != Records::Invalid
+    }
 }
 
 impl From<Records> for String {
@@ -359,15 +410,36 @@ impl From<Records> for String {
 
 impl From<&'static str> for Records {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).expect("err")
+        serde_yaml::from_str(p).unwrap_or(Records::Invalid)
     }
 }
 
+impl From<String> for Records {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Records::Invalid)
+    }
+}
+
+impl fmt::Display for Records {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// /v1/me/statuses assepts parameters.
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum MeStatuses {
     work_id,
     kind,
+    Invalid,
+}
+
+impl IsValid for MeStatuses {
+    fn is_valid(&self) -> bool {
+        *self != MeStatuses::Invalid
+    }
 }
 
 impl From<MeStatuses> for String {
@@ -378,18 +450,39 @@ impl From<MeStatuses> for String {
 
 impl From<&'static str> for MeStatuses {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).expect("err")
+        serde_yaml::from_str(p).unwrap_or(MeStatuses::Invalid)
     }
 }
 
+impl From<String> for MeStatuses {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(MeStatuses::Invalid)
+    }
+}
+
+impl fmt::Display for MeStatuses {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// /v1/me/records assepts parameters.
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum MeRecords {
     episode_id,
     comment,
     rating,
     share_twitter,
     share_facebook,
+    Invalid,
+}
+
+impl IsValid for MeRecords {
+    fn is_valid(&self) -> bool {
+        *self != MeRecords::Invalid
+    }
 }
 
 impl From<MeRecords> for String {
@@ -400,12 +493,26 @@ impl From<MeRecords> for String {
 
 impl From<&'static str> for MeRecords {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).expect("err")
+        serde_yaml::from_str(p).unwrap_or(MeRecords::Invalid)
     }
 }
 
+impl From<String> for MeRecords {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(MeRecords::Invalid)
+    }
+}
+
+impl fmt::Display for MeRecords {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// /v1/me/works assepts parameters.
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum MeWorks {
     fields,
     filter_ids,
@@ -417,6 +524,13 @@ pub enum MeWorks {
     sort_id,
     sort_season,
     sort_watchers_count,
+    Invalid,
+}
+
+impl IsValid for MeWorks {
+    fn is_valid(&self) -> bool {
+        *self != MeWorks::Invalid
+    }
 }
 
 impl From<MeWorks> for String {
@@ -427,12 +541,26 @@ impl From<MeWorks> for String {
 
 impl From<&'static str> for MeWorks {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap()
+        serde_yaml::from_str(p).unwrap_or(MeWorks::Invalid)
     }
 }
 
+impl From<String> for MeWorks {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(MeWorks::Invalid)
+    }
+}
+
+impl fmt::Display for MeWorks {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// /v1/me/programs assepts parameters.
+
 #[allow(non_camel_case_types)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub enum MePrograms {
     fields,
     filter_ids,
@@ -446,6 +574,13 @@ pub enum MePrograms {
     per_page,
     sort_id,
     sort_started_at,
+    Invalid,
+}
+
+impl IsValid for MePrograms {
+    fn is_valid(&self) -> bool {
+        *self != MePrograms::Invalid
+    }
 }
 
 impl From<MePrograms> for String {
@@ -456,6 +591,18 @@ impl From<MePrograms> for String {
 
 impl From<&'static str> for MePrograms {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap()
+        serde_yaml::from_str(p).unwrap_or(MePrograms::Invalid)
+    }
+}
+
+impl From<String> for MePrograms {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(MePrograms::Invalid)
+    }
+}
+
+impl fmt::Display for MePrograms {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
