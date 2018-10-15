@@ -28,6 +28,8 @@ pub struct AccessToken {
     pub code: String,
 }
 
+type Revoke = String;
+
 impl OAuth {
     pub fn client_id<P>(client_id: P) -> OAuth
     where
@@ -55,7 +57,7 @@ impl OAuth {
     /// # }
     /// ```
 
-    pub fn info() -> Service {
+    pub fn info() -> Service<String> {
         Service {
             client: Client::new().get("https://api.annict.com/oauth/token/info"),
             params: None,
@@ -79,7 +81,7 @@ impl OAuth {
     /// # }
     /// ```
 
-    pub fn revoke<A>(access_token: A) -> Service
+    pub fn revoke<A>(access_token: A) -> Service<Revoke>
     where
         A: Into<String>,
     {

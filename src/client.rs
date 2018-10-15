@@ -30,7 +30,10 @@ impl Client {
         }
     }
 
-    pub fn call(&self, service: Service) -> Result<Value, String> {
+    pub fn call<K: Into<String>>(&self, service: Service<K>) -> Result<Value, String>
+    where
+        K: serde::Serialize,
+    {
         let mut client = service.client.bearer_auth(self.clone().token);
         if let Some(params) = service.params {
             client = client.query(&params);
