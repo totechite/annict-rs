@@ -1,6 +1,6 @@
 [package]
 name = "annis"
-version = "0.0.2"
+version = "0.0.2.1"
 authors = ["totechite <yutan.h9@gmail.com>"]
 description = "Annict API client library"
 documentation = "https://docs.rs/annis"
