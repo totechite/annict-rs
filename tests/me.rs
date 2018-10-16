@@ -20,8 +20,8 @@ fn me_works() {
 #[test]
 fn me_programs() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
-    let episodes = annis::me_programs();
-    client.call(episodes).unwrap();
+    let programs = annis::me_programs();
+    client.call(programs).unwrap();
 }
 
 #[test]
@@ -34,8 +34,7 @@ fn me_statuses() {
 #[test]
 fn me_records() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
-    let records =
-        annis::me_records(Method::Post, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
+    let records = annis::me_records(Method::Post, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
     client.clone().call(records).unwrap();
 
     let records = annis::me_records(Method::Patch, 1838569).params(vec![("rating", "5")]);

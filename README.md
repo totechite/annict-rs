@@ -7,7 +7,7 @@ annict-rs
 Annict API client library for Rust. 
 
 - [Annict API Official Document](https://docs.annict.com/)
-- [Library Documents](https://docs.rs/annis)
+- [Library Document](https://docs.rs/annis)
 - [Changelog](https://github.com/totechite/annict-rs/blob/master/CHANGELOG.md)
 
 
@@ -106,5 +106,5 @@ use annis::{OAuth, Client, Works::*};
 
 License
 ----------------------------
-MIT license 
+MIT license   
 [http://opensource.org/licenses/mit-license.php]()

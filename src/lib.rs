@@ -406,7 +406,7 @@ pub fn me_works() -> Service<MeWorks> {
 ///
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let programs = annis::me_programs().params(vec![(field, "id, title")]);
+/// let programs = annis::me_programs().params(vec![(fields, "id, title")]);
 ///
 /// client.call(programs)?;
 /// # Ok(())

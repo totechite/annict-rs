@@ -1,5 +1,5 @@
 extern crate annis;
-use annis::{AccessToken, AuthorizeUrl, Client, OAuth};
+use annis::{AccessToken, AuthorizeUrl, Client, OAuth, Works::*};
 use std::env;
 
 #[test]
@@ -20,7 +20,7 @@ fn main() {
         .build();
 
     let client = Client::set_token(env::var("annict_access_token").unwrap());
-    let works = annis::works().params(vec![("filter_title", "lain")]);
+    let works = annis::works().params(vec![(filter_title, "lain")]);
 
     let _json = client.call(works).unwrap();
 
