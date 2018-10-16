@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://!docs.rs/annis/0.0.1")]
+#![doc(html_root_url = "https://!docs.rs/annis/0.0.2")]
 
 //! annis
 //! =====
@@ -6,9 +6,9 @@
 //! The `annis` is a Rust interface to the Annict API.
 //! [Annict API Official Document](https://docs.annict.com/)
 //!
-//! Request to /v1/works
+//! Usage
 //! --------------------
-//!
+//! Request to /v1/works
 //! ```rust
 //! # extern crate annis;
 //! # use annis::{Client, Works};
@@ -169,6 +169,7 @@ pub fn episodes() -> Service<Episodes> {
 
 /// Request to /v1/records   
 /// .params() assepts `Records` enum.
+///
 /// Examples
 /// ========
 /// ```rust
@@ -209,6 +210,7 @@ pub fn records() -> Service<Records> {
 
 /// Request to /v1/me/statuses   
 /// .params() assepts `MeStatuses` enum.
+///
 /// Examples
 /// ========
 /// ```rust
@@ -249,8 +251,10 @@ pub fn me_statuses() -> Service<MeStatuses> {
 
 /// Request to /v1/me/records   
 /// .params() assepts `MeRecords` enum.
+///
 /// Examples
 /// ========
+///
 /// POST
 /// ```rust
 /// # use annis::{Client, Method};
@@ -279,7 +283,7 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// ```
 ///
 /// using enum code
-/// -----------------------
+/// ****************
 /// POST
 /// ```rust
 /// # use annis::{Client, Method};
@@ -337,6 +341,7 @@ pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
 
 /// Request to /v1/me/works   
 /// .params() assepts `MeWorks` enum.
+///
 /// Examples
 /// ========
 /// ```rust
@@ -352,7 +357,6 @@ pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
 /// # }
 /// ```
 /// using enum code
-/// -------------------------
 /// ```rust
 /// # use annis::Client;
 /// #
@@ -377,22 +381,23 @@ pub fn me_works() -> Service<MeWorks> {
 
 /// Request to /v1/me/programs   
 /// .params() assepts `MePrograms` enum.
+///
 /// Examples
 /// ========
+///
 /// ```rust
 /// # use annis::Client;
 /// #
 /// # fn run() -> Result<(), String> {
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let programs = annis::me_programs();
+/// let programs = annis::me_programs().params(vec![("field", "id, title")]);
 ///
 /// client.call(programs)?;
 /// # Ok(())
 /// # }
 /// ```
 /// using enum code
-/// ------------------------
 /// ```rust
 /// # use annis::Client;
 /// #
@@ -401,7 +406,7 @@ pub fn me_works() -> Service<MeWorks> {
 ///
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let programs = annis::me_programs();
+/// let programs = annis::me_programs().params(vec![(field, "id, title")]);
 ///
 /// client.call(programs)?;
 /// # Ok(())
@@ -693,7 +698,7 @@ impl fmt::Display for MeWorks {
     }
 }
 
-/// used by programs() function   
+/// used by me_programs() function   
 /// /v1/me/programs assepts parameters.
 
 #[allow(non_camel_case_types)]
