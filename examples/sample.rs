@@ -1,5 +1,5 @@
 extern crate annis;
-use annis::Client;
+use annis::{Client, Works::*};
 use std::env;
 
 fn main() -> Result<(), String>{
@@ -8,12 +8,12 @@ fn main() -> Result<(), String>{
 		env::var("annict_access_token").unwrap()
 	);
 
-	let params = vec![("filter_title", "lain"),("fields","title")];
+	let params = vec![(filter_title, "lain"),(fields,"title")];
     let works = annis::works().params(params);
 
 	let json = client.call(works)?;
-	
 	println!("{:?}", json["works"]);
+
 
 	Ok(())  
 }
