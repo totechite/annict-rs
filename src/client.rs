@@ -1,5 +1,7 @@
+use serde::Serialize;
 use Service;
 use Value;
+use std::cmp::PartialEq;
 
 /// A client to make request with Service.
 ///
@@ -30,9 +32,9 @@ impl Client {
         }
     }
 
-    pub fn call<K: Into<String>>(&self, service: Service<K>) -> Result<Value, String>
+    pub fn call<K: Into<String> + PartialEq>(&self, service: Service<K>) -> Result<Value, String>
     where
-        K: serde::Serialize,
+        K: Serialize,
     {
         let mut client = service.client.bearer_auth(self.clone().token);
         if let Some(params) = service.params {

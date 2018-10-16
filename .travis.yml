@@ -3,6 +3,9 @@ rust:
   - stable
   - beta
   - nightly
+os:
+  - windows
+  - linux
 script:
   - cargo build --verbose --all
   - cargo test --verbose --all

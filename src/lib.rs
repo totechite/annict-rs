@@ -51,7 +51,7 @@ pub use serde_json::Value;
 ///
 
 #[derive(Debug)]
-pub struct Service<P> {
+pub struct Service<P: Into<String> + std::cmp::PartialEq> {
     pub client: RequestBuilder,
     pub params: Option<Vec<(P, String)>>,
 }
