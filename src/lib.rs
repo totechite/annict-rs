@@ -85,8 +85,9 @@ pub enum Method {
     Delete,
 }
 
-/// Request to /v1/works
-/// 
+/// Request to /v1/works   
+/// .params() assepts `Works` enum.
+///
 /// Examples
 /// ========
 /// ```rust
@@ -101,6 +102,22 @@ pub enum Method {
 /// # Ok(())
 /// # }
 /// ```
+///
+/// using enum code
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// use annis::Works::*;
+///
+/// let client = Client::set_token("annict_access_token");
+///
+/// let works = annis::works().params(vec![(filter_title, "lain")]);
+///
+/// client.call(works)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn works() -> Service<Works> {
     Service {
@@ -109,7 +126,8 @@ pub fn works() -> Service<Works> {
     }
 }
 
-/// Request to /v1/episodes
+/// Request to /v1/episodes   
+/// .params() assepts `Episodes` enum.
 ///
 /// Examples
 /// ========
@@ -125,6 +143,22 @@ pub fn works() -> Service<Works> {
 /// # Ok(())
 /// # }
 /// ```
+///
+/// using enum code
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// use annis::Episodes::*;
+///
+/// let client = Client::set_token("annict_access_token");
+///
+/// let episodes = annis::episodes().params(vec![(filter_work_id, "2274")]);
+///
+/// client.call(episodes)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn episodes() -> Service<Episodes> {
     Service {
@@ -133,8 +167,8 @@ pub fn episodes() -> Service<Episodes> {
     }
 }
 
-/// Request to /v1/records
-///
+/// Request to /v1/records   
+/// .params() assepts `Records` enum.
 /// Examples
 /// ========
 /// ```rust
@@ -149,6 +183,22 @@ pub fn episodes() -> Service<Episodes> {
 /// # Ok(())
 /// # }
 /// ```
+///
+/// using enum code.
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// use annis::Records::*;
+///
+/// let client = Client::set_token("annict_access_token");
+///
+/// let records = annis::records().params(vec![(fields, "title")]);
+///
+/// client.call(records)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn records() -> Service<Records> {
     Service {
@@ -157,8 +207,8 @@ pub fn records() -> Service<Records> {
     }
 }
 
-/// Request to /v1/me/statuses
-///
+/// Request to /v1/me/statuses   
+/// .params() assepts `MeStatuses` enum.
 /// Examples
 /// ========
 /// ```rust
@@ -173,6 +223,22 @@ pub fn records() -> Service<Records> {
 /// # Ok(())
 /// # }
 /// ```
+///
+/// using enum code.
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// use annis::MeStatuses::*;
+///
+/// let client = Client::set_token("annict_access_token");
+///
+/// let statuses = annis::me_statuses().params(vec![(work_id, "3994"), (kind, "watched")]);
+///
+/// client.call(statuses)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn me_statuses() -> Service<MeStatuses> {
     Service {
@@ -181,8 +247,8 @@ pub fn me_statuses() -> Service<MeStatuses> {
     }
 }
 
-/// Request to /v1/me/records
-///
+/// Request to /v1/me/records   
+/// .params() assepts `MeRecords` enum.
 /// Examples
 /// ========
 /// POST
@@ -206,6 +272,39 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let records = annis::me_records(Method::Patch, 1838569).params(vec![("rating", "5")]);
+///
+/// client.call(records)?;
+/// # Ok(())
+/// # }
+/// ```
+///
+/// using enum code
+/// -----------------------
+/// POST
+/// ```rust
+/// # use annis::{Client, Method};
+/// #
+/// # fn post() -> Result<(), String> {
+/// use annis::MeRecords::*;
+///
+/// let client = Client::set_token("annict_access_token");
+///
+/// let records = annis::me_records(Method::Post, 5013).params(vec![(episode_id, "5013"), (rating, "5")]);
+///
+/// client.call(records)?;
+/// # Ok(())
+/// # }
+/// ```
+/// PATCH
+/// ```rust
+/// # use annis::{Client, Method};
+/// #
+/// # fn patch() -> Result<(), String> {
+/// use annis::MeRecords::*;
+///
+/// let client = Client::set_token("annict_access_token");
+///
+/// let records = annis::me_records(Method::Patch, 1838569).params(vec![(rating, "5")]);
 ///
 /// client.call(records)?;
 /// # Ok(())
@@ -236,8 +335,8 @@ pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
     }
 }
 
-/// Request to /v1/me/works
-///
+/// Request to /v1/me/works   
+/// .params() assepts `MeWorks` enum.
 /// Examples
 /// ========
 /// ```rust
@@ -252,6 +351,22 @@ pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
 /// # Ok(())
 /// # }
 /// ```
+/// using enum code
+/// -------------------------
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// use annis::MeWorks::*;
+///
+/// let client = Client::set_token("annict_access_token");
+///
+/// let me_works = annis::me_works().params(vec![(filter_title,"機動戦士ガンダムUC")]);
+///
+/// client.call(me_works)?;
+/// # Ok(())
+/// # }
+/// ```
 
 pub fn me_works() -> Service<MeWorks> {
     Service {
@@ -260,14 +375,30 @@ pub fn me_works() -> Service<MeWorks> {
     }
 }
 
-/// Request to /v1/me/programs
-///
+/// Request to /v1/me/programs   
+/// .params() assepts `MePrograms` enum.
 /// Examples
 /// ========
 /// ```rust
 /// # use annis::Client;
 /// #
 /// # fn run() -> Result<(), String> {
+/// let client = Client::set_token("annict_access_token");
+///
+/// let programs = annis::me_programs();
+///
+/// client.call(programs)?;
+/// # Ok(())
+/// # }
+/// ```
+/// using enum code
+/// ------------------------
+/// ```rust
+/// # use annis::Client;
+/// #
+/// # fn run() -> Result<(), String> {
+/// use annis::MePrograms::*;
+///
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let programs = annis::me_programs();
@@ -288,8 +419,8 @@ pub trait IsValid {
     fn is_valid(&self) -> bool;
 }
 
+/// used by works() function   
 /// /v1/works assepts parameters.
-/// 
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -336,6 +467,7 @@ impl fmt::Display for Works {
     }
 }
 
+/// used by episodes() function   
 /// /v1/episodes assepts parameters.
 
 #[allow(non_camel_case_types)]
@@ -381,6 +513,7 @@ impl fmt::Display for Episodes {
     }
 }
 
+/// used by records() function   
 /// /v1/records assepts parameters.
 
 #[allow(non_camel_case_types)]
@@ -426,6 +559,7 @@ impl fmt::Display for Records {
     }
 }
 
+/// used by me_statuses() function   
 /// /v1/me/statuses assepts parameters.
 
 #[allow(non_camel_case_types)]
@@ -466,6 +600,7 @@ impl fmt::Display for MeStatuses {
     }
 }
 
+/// used by me_records() function   
 /// /v1/me/records assepts parameters.
 
 #[allow(non_camel_case_types)]
@@ -509,6 +644,7 @@ impl fmt::Display for MeRecords {
     }
 }
 
+/// used by me_works() function   
 /// /v1/me/works assepts parameters.
 
 #[allow(non_camel_case_types)]
@@ -557,6 +693,7 @@ impl fmt::Display for MeWorks {
     }
 }
 
+/// used by programs() function   
 /// /v1/me/programs assepts parameters.
 
 #[allow(non_camel_case_types)]
