@@ -40,6 +40,5 @@ fn filter_ids() {
 fn enum_params() {
     let use_enum = annis::works().params(vec![(Works::filter_title, "lain")]);
     let use_string = annis::works().params(vec![("filter_title", "lain")]);
-
     assert_eq!(use_enum.params, use_string.params);
 }

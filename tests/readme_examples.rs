@@ -19,6 +19,7 @@ fn main() {
         .code("certification code")
         .build();
 
+
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let works = annis::works().params(vec![(filter_title, "lain")]);
 
