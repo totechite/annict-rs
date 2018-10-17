@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://!docs.rs/annis/0.0.2")]
+#![doc(html_root_url = "https://!docs.rs/annis/0.0.3")]
 
 //! annis
 //! =====

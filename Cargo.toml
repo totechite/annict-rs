@@ -1,6 +1,6 @@
 [package]
 name = "annis"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["totechite <yutan.h9@gmail.com>"]
 description = "Annict API client library"
 documentation = "https://docs.rs/annis"
@@ -11,7 +11,7 @@ license = "MIT"
 readme = "README.md"
 
 [badges]
-appveyor = { repository = "annict-rs", branch = "master", service = "github" }
+appveyor = { repository = "totechite/annict-rs", branch = "master", service = "github" }
 travis-ci = { repository = "totechite/annict-rs", branch = "master" }
 
 [dependencies]
