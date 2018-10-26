@@ -30,7 +30,6 @@
 //! ```
 
 extern crate reqwest;
-use reqwest::RequestBuilder;
 use std::fmt;
 #[macro_use]
 extern crate serde_derive;
@@ -38,6 +37,7 @@ extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
 extern crate serde_yaml;
+extern crate futures;
 
 mod auth;
 mod client;
@@ -46,13 +46,14 @@ pub use auth::*;
 pub use client::Client;
 pub use serde_json::Value;
 
-/// A Service to make request to endpoint.
+/// A Service to make request to endpoint.   
 ///
 ///
 
 #[derive(Debug)]
 pub struct Service<P: Into<String> + std::cmp::PartialEq> {
-    pub client: RequestBuilder,
+    pub method: reqwest::Method,
+    pub url: String,
     pub params: Option<Vec<(P, String)>>,
 }
 
@@ -71,18 +72,17 @@ impl<P: Into<String> + std::cmp::PartialEq + IsValid> Service<P> {
             params.append(&mut x);
         };
         Service {
-            client: self.client,
             params: Some(params),
+            ..self
         }
     }
 }
 
 /// A type of argument for me_records().
-
 pub enum Method {
-    Post,
-    Patch,
-    Delete,
+    POST,
+    PATCH,
+    DELETE,
 }
 
 /// Request to /v1/works   
@@ -121,7 +121,8 @@ pub enum Method {
 
 pub fn works() -> Service<Works> {
     Service {
-        client: reqwest::Client::new().get("https://api.annict.com/v1/works"),
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/works".to_string(),
         params: None,
     }
 }
@@ -162,7 +163,8 @@ pub fn works() -> Service<Works> {
 
 pub fn episodes() -> Service<Episodes> {
     Service {
-        client: reqwest::Client::new().get("https://api.annict.com/v1/episodes"),
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/episodes".to_string(),
         params: None,
     }
 }
@@ -203,7 +205,8 @@ pub fn episodes() -> Service<Episodes> {
 
 pub fn records() -> Service<Records> {
     Service {
-        client: reqwest::Client::new().get("https://api.annict.com/v1/records"),
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/records".to_string(),
         params: None,
     }
 }
@@ -244,7 +247,8 @@ pub fn records() -> Service<Records> {
 
 pub fn me_statuses() -> Service<MeStatuses> {
     Service {
-        client: reqwest::Client::new().post("https://api.annict.com/v1/me/statuses"),
+        method: reqwest::Method::POST,
+        url: "https://api.annict.com/v1/me/statuses".to_string(),
         params: None,
     }
 }
@@ -316,25 +320,28 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// ```
 
 pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
-    let (client, params): (RequestBuilder, Option<Vec<(MeRecords, String)>>) = match method {
-        Method::Post => (
-            reqwest::Client::new().post("https://api.annict.com/v1/me/records"),
-            Some(vec![(MeRecords::episode_id, id.to_string())]),
-        ),
-        Method::Patch => (
-            reqwest::Client::new()
-                .patch(format!("https://api.annict.com/v1/me/records/{}", id).as_str()),
-            None,
-        ),
-        Method::Delete => (
-            reqwest::Client::new()
-                .delete(format!("https://api.annict.com/v1/me/records/{}", id).as_str()),
-            None,
-        ),
-    };
+    let (method, url, params): (reqwest::Method, String, Option<Vec<(MeRecords, String)>>) =
+        match method {
+            Method::POST => (
+                reqwest::Method::POST,
+                "https://api.annict.com/v1/me/records".to_string(),
+                Some(vec![(MeRecords::episode_id, id.to_string())]),
+            ),
+            Method::PATCH => (
+                reqwest::Method::PATCH,
+                format!("https://api.annict.com/v1/me/records/{}", id),
+                None,
+            ),
+            Method::DELETE => (
+                reqwest::Method::DELETE,
+                format!("https://api.annict.com/v1/me/records/{}", id),
+                None,
+            ),
+        };
 
     Service {
-        client: client,
+        method: method,
+        url: url,
         params: params,
     }
 }
@@ -374,7 +381,8 @@ pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
 
 pub fn me_works() -> Service<MeWorks> {
     Service {
-        client: reqwest::Client::new().get("https://api.annict.com/v1/me/works"),
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/me/works".to_string(),
         params: None,
     }
 }
@@ -415,7 +423,8 @@ pub fn me_works() -> Service<MeWorks> {
 
 pub fn me_programs() -> Service<MePrograms> {
     Service {
-        client: reqwest::Client::new().get("https://api.annict.com/v1/me/programs"),
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/me/programs".to_string(),
         params: None,
     }
 }

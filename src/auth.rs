@@ -1,4 +1,4 @@
-use reqwest::{Client, Url};
+use reqwest::{Client, Method, Url};
 use serde_json::Value;
 use Service;
 
@@ -59,7 +59,8 @@ impl OAuth {
 
     pub fn info() -> Service<String> {
         Service {
-            client: Client::new().get("https://api.annict.com/oauth/token/info"),
+            method: Method::GET,
+            url: "https://api.annict.com/oauth/token/info".to_string(),
             params: None,
         }
     }
@@ -86,7 +87,8 @@ impl OAuth {
         A: Into<String>,
     {
         Service {
-            client: Client::new().post("https://api.annict.com/oauth/revoke"),
+            method: Method::POST,
+            url: "https://api.annict.com/oauth/revoke".to_string(),
             params: Some(vec![("token".to_string(), access_token.into())]),
         }
     }

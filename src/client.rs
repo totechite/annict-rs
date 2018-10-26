@@ -1,7 +1,7 @@
 use serde::Serialize;
+use std::cmp::PartialEq;
 use Service;
 use Value;
-use std::cmp::PartialEq;
 
 /// A client to make request with Service.
 ///
@@ -36,13 +36,15 @@ impl Client {
     where
         K: Serialize,
     {
-        let mut client = service.client.bearer_auth(self.clone().token);
+        let mut client = reqwest::Client::new()
+            .request(service.method, service.url.as_str())
+            .bearer_auth(self.clone().token);
         if let Some(params) = service.params {
             client = client.query(&params);
         };
-        let mut req = try!(client.send().map_err(|err| err.to_string()).or(Err(
+        let mut res = try!(client.send().map_err(|err| err.to_string()).or(Err(
             "Invalid values at token or request parameters".to_string()
         )));
-        req.json::<Value>().or(Ok(Value::Null))
+        res.json::<Value>().or(Ok(Value::Null))
     }
 }
