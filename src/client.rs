@@ -1,7 +1,7 @@
 use serde::Serialize;
 use std::cmp::PartialEq;
-use Service;
-use Value;
+use crate::Service;
+use crate::Value;
 
 /// A client to make request with Service.
 ///
@@ -37,14 +37,16 @@ impl Client {
         K: Serialize,
     {
         let mut client = reqwest::Client::new()
-            .request(service.method, service.url.as_str())
-            .bearer_auth(self.clone().token);
+            .request(service.method, service.url.as_str());
+            // .bearer_auth(self.clone().token);
         if let Some(params) = service.params {
-            client = client.query(&params);
+            client = client.query(&params).query(&vec![("access_token", self.clone().token)]);
         };
-        let mut res = try!(client.send().map_err(|err| err.to_string()).or(Err(
+        println!("{:?}", client);
+        let mut res = r#try!(client.send().map_err(|err| err.to_string()).or(Err(
             "Invalid values at token or request parameters".to_string()
         )));
-        res.json::<Value>().or(Ok(Value::Null))
+        res.json::<crate::Value>().or(Ok(Value::Null))
+        // Ok(res.text().unwrap())
     }
 }
