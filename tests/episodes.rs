@@ -14,6 +14,7 @@ fn filter_work_id() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let episodes = annis::episodes().params(vec![("filter_work_id", "2274")]);
     let json = client.call(episodes).unwrap();
+    println!("{:?}", json["episodes"][0]["work"]["title"]);
     assert_eq!(
         json["episodes"][0]["work"]["title"],
         "ゆゆ式".to_string()

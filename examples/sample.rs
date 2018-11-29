@@ -10,10 +10,8 @@ fn main() -> Result<(), String>{
 
 	let params = vec![(filter_title, "lain"),(fields,"title")];
     let works = annis::works().params(params);
-
 	let json = client.call(works)?;
-	println!("{:?}", json["works"]);
-
+	println!("{:?}", json);
 
 	Ok(())  
 }

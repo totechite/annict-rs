@@ -20,7 +20,7 @@ Usage
 Add this to your `Cargo.toml`:   
 ```toml
 [dependencies]
-annis = "0.0.3"
+annis = "0.0.4"
 ```
 and this to your crate root:   
 ```rust

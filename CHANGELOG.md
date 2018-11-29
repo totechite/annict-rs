@@ -1,3 +1,8 @@
+v0.0.4
+---------------
+- Fix accesstoken include query.
+- Added functions. `me_following_activities` `me_reviews` `me` `following` `followers` `activities` `reviews` `users`
+
 v0.0.3
 ---------------
 - Fix docs.rs/annis build.

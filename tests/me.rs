@@ -34,10 +34,10 @@ fn me_statuses() {
 #[test]
 fn me_records() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
-    let records = annis::me_records(Method::Post, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
+    let records = annis::me_records(Method::POST, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
     client.clone().call(records).unwrap();
     
-    let records = annis::me_records(Method::Patch, 1838569).params(vec![("rating", "5")]);
+    let records = annis::me_records(Method::PATCH, 1838569).params(vec![("rating", "5")]);
     let json = client.call(records).unwrap();
     println!("{:?}", json);
 }

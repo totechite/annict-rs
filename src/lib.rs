@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://!docs.rs/annis/0.0.3")]
+#![doc(html_root_url = "https://!docs.rs/annis/0.0.4")]
 
 //! annis
 //! =====
@@ -37,13 +37,12 @@ extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
 extern crate serde_yaml;
-extern crate futures;
 
 mod auth;
 mod client;
 
-pub use auth::*;
-pub use client::Client;
+pub use crate::auth::*;
+pub use crate::client::Client;
 pub use serde_json::Value;
 
 /// A Service to make request to endpoint.   
@@ -83,6 +82,472 @@ pub enum Method {
     POST,
     PATCH,
     DELETE,
+}
+
+fn request<R: IsValid + Into<String> + std::cmp::PartialEq>(
+    method: reqwest::Method,
+    url: String,
+) -> Service<R> {
+    Service {
+        method: method,
+        url: url,
+        params: None,
+    }
+}
+
+/// Request to /v1/records   
+/// .params() assepts `Records` enum.
+
+pub fn reviews() -> Service<Reviews> {
+    request(
+        reqwest::Method::GET,
+        "https://api.annict.com/v1/records".to_string(),
+    )
+}
+
+/// used by records() function   
+/// /v1/records assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Reviews {
+    fields,
+    filter_ids,
+    filter_work_id,
+    page,
+    per_page,
+    sort_id,
+    sort_likes_count,
+    Invalid,
+}
+
+impl IsValid for Reviews {
+    fn is_valid(&self) -> bool {
+        *self != Reviews::Invalid
+    }
+}
+
+impl From<Reviews> for String {
+    fn from(p: Reviews) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Reviews {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Reviews::Invalid)
+    }
+}
+
+impl From<String> for Reviews {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Reviews::Invalid)
+    }
+}
+
+impl fmt::Display for Reviews {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// Request to /v1/users   
+/// .params() assepts `Users` enum.
+
+pub fn users() -> Service<Users> {
+    request(
+        reqwest::Method::GET,
+        "https://api.annict.com/v1/users".to_string(),
+    )
+}
+
+/// used by users() function   
+/// /v1/users assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Users {
+    fields,
+    filter_ids,
+    filter_usernames,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Users {
+    fn is_valid(&self) -> bool {
+        *self != Users::Invalid
+    }
+}
+
+impl From<Users> for String {
+    fn from(p: Users) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Users {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Users::Invalid)
+    }
+}
+
+impl From<String> for Users {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Users::Invalid)
+    }
+}
+
+impl fmt::Display for Users {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// Request to /v1/following   
+/// .params() assepts `Following` enum.
+
+pub fn following() -> Service<Following> {
+    request(
+        reqwest::Method::GET,
+        "https://api.annict.com/v1/following".to_string(),
+    )
+}
+
+/// used by following() function   
+/// /v1/following assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Following {
+    fields,
+    filter_user_id,
+    filter_username,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Following {
+    fn is_valid(&self) -> bool {
+        *self != Following::Invalid
+    }
+}
+
+impl From<Following> for String {
+    fn from(p: Following) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Following {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Following::Invalid)
+    }
+}
+
+impl From<String> for Following {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Following::Invalid)
+    }
+}
+
+impl fmt::Display for Following {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// Request to /v1/followers   
+/// .params() assepts `Followers` enum.
+
+pub fn followers() -> Service<Followers> {
+    request(
+        reqwest::Method::GET,
+        "https://api.annict.com/v1/followers".to_string(),
+    )
+}
+
+/// used by followers() function   
+/// /v1/followers assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Followers {
+    fields,
+    filter_user_id,
+    filter_username,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Followers {
+    fn is_valid(&self) -> bool {
+        *self != Followers::Invalid
+    }
+}
+
+impl From<Followers> for String {
+    fn from(p: Followers) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Followers {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Followers::Invalid)
+    }
+}
+
+impl From<String> for Followers {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Followers::Invalid)
+    }
+}
+
+impl fmt::Display for Followers {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+/// Request to /v1/activities   
+/// .params() assepts `Activities` enum.
+
+pub fn activities() -> Service<Activities> {
+    request(
+        reqwest::Method::GET,
+        "https://api.annict.com/v1/activities".to_string(),
+    )
+}
+
+/// used by activities() function   
+/// /v1/activities assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Activities {
+    fields,
+    filter_users_ids,
+    filter_username,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Activities {
+    fn is_valid(&self) -> bool {
+        *self != Activities::Invalid
+    }
+}
+
+impl From<Activities> for String {
+    fn from(p: Activities) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Activities {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Activities::Invalid)
+    }
+}
+
+impl From<String> for Activities {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Activities::Invalid)
+    }
+}
+
+impl fmt::Display for Activities {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// Request to /v1/me   
+/// .params() assepts `Me` enum.
+
+pub fn me() -> Service<Me> {
+    request(
+        reqwest::Method::GET,
+        "https://api.annict.com/v1/me".to_string(),
+    )
+}
+
+/// used by me() function   
+/// /v1/me assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Me {
+    fields,
+    Invalid,
+}
+
+impl IsValid for Me {
+    fn is_valid(&self) -> bool {
+        *self != Me::Invalid
+    }
+}
+
+impl From<Me> for String {
+    fn from(p: Me) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Me {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Me::Invalid)
+    }
+}
+
+impl From<String> for Me {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Me::Invalid)
+    }
+}
+
+impl fmt::Display for Me {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// Request to /v1/me/reviews   
+/// .params() assepts `MeReviews` enum.
+
+// pub fn me_reviews() -> Service<MeReviews> {
+//     request(
+//         reqwest::Method::POST,
+//         "https://api.annict.com/v1/me/reviews".to_string(),
+//     )
+// }
+pub fn me_reviews(method: Method, id: usize) -> Service<MeReviews> {
+        match method {
+            Method::POST => {
+                request(reqwest::Method::POST, "https://api.annict.com/v1/me/reviews".to_string(),)
+                .params(vec![(MeReviews::work_id, id.to_string())])
+            },
+            Method::PATCH => request(
+                reqwest::Method::PATCH,
+                format!("https://api.annict.com/v1/me/reviews/{}", id),
+            ),
+            Method::DELETE => request(
+                reqwest::Method::DELETE,
+                format!("https://api.annict.com/v1/me/reviews/{}", id),
+            ),
+        }
+}
+
+/// used by me_reviews() function   
+/// /v1/me/reviews assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum MeReviews {
+    work_id,
+    title,
+    body,
+    rating_animation_state,
+    rating_music_state,
+    rating_story_state,
+    rating_character_state,
+    rating_overall_state,
+    share_twitter,
+    share_facebook,
+    Invalid,
+}
+
+impl IsValid for MeReviews {
+    fn is_valid(&self) -> bool {
+        *self != MeReviews::Invalid
+    }
+}
+
+impl From<MeReviews> for String {
+    fn from(p: MeReviews) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for MeReviews {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(MeReviews::Invalid)
+    }
+}
+
+impl From<String> for MeReviews {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(MeReviews::Invalid)
+    }
+}
+
+impl fmt::Display for MeReviews {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+/// Request to /v1/me/following_activities   
+/// .params() assepts `MeFollowing_activities` enum.
+
+pub fn me_following_activities() -> Service<MeFollowing_activities> {
+    request(
+        reqwest::Method::GET,
+        "https://api.annict.com/v1/me/following_activities".to_string(),
+    )
+}
+
+/// used by me_following_activities() function   
+/// /v1/me/following_activities assepts parameters.
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum MeFollowing_activities {
+    fields,
+    filter_actions,
+    filter_muted,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for MeFollowing_activities {
+    fn is_valid(&self) -> bool {
+        *self != MeFollowing_activities::Invalid
+    }
+}
+
+impl From<MeFollowing_activities> for String {
+    fn from(p: MeFollowing_activities) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for MeFollowing_activities {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(MeFollowing_activities::Invalid)
+    }
+}
+
+impl From<String> for MeFollowing_activities {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(MeFollowing_activities::Invalid)
+    }
+}
+
+impl fmt::Display for MeFollowing_activities {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 /// Request to /v1/works   
@@ -266,7 +731,7 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// # fn post() -> Result<(), String> {
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let records = annis::me_records(Method::Post, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
+/// let records = annis::me_records(Method::POST, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
 ///
 /// client.call(records)?;
 /// # Ok(())
@@ -279,7 +744,7 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// # fn patch() -> Result<(), String> {
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let records = annis::me_records(Method::Patch, 1838569).params(vec![("rating", "5")]);
+/// let records = annis::me_records(Method::PATCH, 1838569).params(vec![("rating", "5")]);
 ///
 /// client.call(records)?;
 /// # Ok(())
@@ -297,7 +762,7 @@ pub fn me_statuses() -> Service<MeStatuses> {
 ///
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let records = annis::me_records(Method::Post, 5013).params(vec![(episode_id, "5013"), (rating, "5")]);
+/// let records = annis::me_records(Method::POST, 5013).params(vec![(episode_id, "5013"), (rating, "5")]);
 ///
 /// client.call(records)?;
 /// # Ok(())
@@ -312,7 +777,7 @@ pub fn me_statuses() -> Service<MeStatuses> {
 ///
 /// let client = Client::set_token("annict_access_token");
 ///
-/// let records = annis::me_records(Method::Patch, 1838569).params(vec![(rating, "5")]);
+/// let records = annis::me_records(Method::PATCH , 1838569).params(vec![(rating, "5")]);
 ///
 /// client.call(records)?;
 /// # Ok(())
