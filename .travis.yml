@@ -1,8 +1,10 @@
 language: rust
 rust:
   - stable
+  - beta
+matrix:
   allow_failures:
-    - nightly
+    - rust: nightly
 os:
   - windows
   - linux
