@@ -38,6 +38,8 @@ extern crate serde;
 extern crate serde_json;
 extern crate serde_yaml;
 
+extern crate failure;
+
 mod auth;
 mod client;
 
@@ -430,20 +432,21 @@ impl fmt::Display for Me {
 //     )
 // }
 pub fn me_reviews(method: Method, id: usize) -> Service<MeReviews> {
-        match method {
-            Method::POST => {
-                request(reqwest::Method::POST, "https://api.annict.com/v1/me/reviews".to_string(),)
-                .params(vec![(MeReviews::work_id, id.to_string())])
-            },
-            Method::PATCH => request(
-                reqwest::Method::PATCH,
-                format!("https://api.annict.com/v1/me/reviews/{}", id),
-            ),
-            Method::DELETE => request(
-                reqwest::Method::DELETE,
-                format!("https://api.annict.com/v1/me/reviews/{}", id),
-            ),
-        }
+    match method {
+        Method::POST => request(
+            reqwest::Method::POST,
+            "https://api.annict.com/v1/me/reviews".to_string(),
+        )
+        .params(vec![(MeReviews::work_id, id.to_string())]),
+        Method::PATCH => request(
+            reqwest::Method::PATCH,
+            format!("https://api.annict.com/v1/me/reviews/{}", id),
+        ),
+        Method::DELETE => request(
+            reqwest::Method::DELETE,
+            format!("https://api.annict.com/v1/me/reviews/{}", id),
+        ),
+    }
 }
 
 /// used by me_reviews() function   
