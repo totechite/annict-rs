@@ -1,4 +1,4 @@
-use crate::{Service, Value, Error};
+use crate::{Service, Error};
 use serde::Serialize;
 use std::cmp::PartialEq;
 
@@ -7,11 +7,11 @@ use std::cmp::PartialEq;
 /// Examples
 /// ========
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Value};
 /// #
 /// # fn run() -> Result<(), String> {
 /// let client = Client::set_token("access_token");
-/// let res = client.call(annis::works())?;
+/// let res = client.call(annis::works())?.json()?;
 /// #   Ok(())
 /// # }
 ///```
@@ -31,7 +31,7 @@ impl Client {
         }
     }
 
-    pub fn call<K>(&self, service: Service<K>) -> Result<Value, Error>
+    pub fn call<K>(&self, service: Service<K>) -> Result<reqwest::Response, Error>
     where
         K: Serialize + Into<String> + PartialEq,
     {
@@ -41,8 +41,7 @@ impl Client {
         if let Some(params) = service.params {
             client = client.query(&params);
         };
-        let mut res = client.send()?;
-        res.json::<crate::Value>().map_err(Into::into)
+        client.send().map_err(Into::into)
     }
 }
 
