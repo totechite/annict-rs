@@ -1,5 +1,5 @@
 extern crate annis;
-use annis::Client;
+use annis::{Client, Value};
 use std::env;
 
 #[test]
@@ -13,7 +13,7 @@ fn vannila_request() {
 fn filter_work_id() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let episodes = annis::episodes().params(vec![("filter_work_id", "2274")]);
-    let json = client.call(episodes).unwrap();
+    let json = client.call(episodes).unwrap().json::<Value>().unwrap();
     println!("{:?}", json["episodes"][0]["work"]["title"]);
     assert_eq!(
         json["episodes"][0]["work"]["title"],

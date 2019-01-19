@@ -11,17 +11,17 @@
 //! Request to /v1/works
 //! ```rust
 //! # extern crate annis;
-//! # use annis::{Client, Works};
+//! # use annis::{Client, Works, Error, Value};
 //! # use std::env;
 //! #
-//! # fn main() -> Result<(), String>{
+//! # fn main() -> Result<(), Error>{
 //! #
 //! let client = Client::set_token("annict_access_token");
 //!
 //! let params = vec![(Works::filter_title, "lain"),(Works::fields,"title")];
 //! let works = annis::works().params(params);
 //!
-//! let json = client.call(works)?;
+//! let json = client.call(works)?.json::<Value>()?;
 //!
 //! println!("{:?}", json["works"]);
 //! #
@@ -425,12 +425,6 @@ impl fmt::Display for Me {
 /// Request to /v1/me/reviews   
 /// .params() assepts `MeReviews` enum.
 
-// pub fn me_reviews() -> Service<MeReviews> {
-//     request(
-//         reqwest::Method::POST,
-//         "https://api.annict.com/v1/me/reviews".to_string(),
-//     )
-// }
 pub fn me_reviews(method: Method, id: usize) -> Service<MeReviews> {
     match method {
         Method::POST => request(
@@ -559,9 +553,9 @@ impl fmt::Display for MeFollowing_activities {
 /// Examples
 /// ========
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let works = annis::works().params(vec![("filter_title", "lain")]);
@@ -573,9 +567,9 @@ impl fmt::Display for MeFollowing_activities {
 ///
 /// using enum code
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// use annis::Works::*;
 ///
 /// let client = Client::set_token("annict_access_token");
@@ -601,9 +595,9 @@ pub fn works() -> Service<Works> {
 /// Examples
 /// ========
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let episodes = annis::episodes().params(vec![("filter_work_id", "2274")]);
@@ -615,9 +609,9 @@ pub fn works() -> Service<Works> {
 ///
 /// using enum code
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// use annis::Episodes::*;
 ///
 /// let client = Client::set_token("annict_access_token");
@@ -643,9 +637,9 @@ pub fn episodes() -> Service<Episodes> {
 /// Examples
 /// ========
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let records = annis::records().params(vec![("fields", "title")]);
@@ -657,9 +651,9 @@ pub fn episodes() -> Service<Episodes> {
 ///
 /// using enum code.
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// use annis::Records::*;
 ///
 /// let client = Client::set_token("annict_access_token");
@@ -685,9 +679,9 @@ pub fn records() -> Service<Records> {
 /// Examples
 /// ========
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let statuses = annis::me_statuses().params(vec![("work_id", "3994"), ("kind", "watched")]);
@@ -699,9 +693,9 @@ pub fn records() -> Service<Records> {
 ///
 /// using enum code.
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// use annis::MeStatuses::*;
 ///
 /// let client = Client::set_token("annict_access_token");
@@ -729,9 +723,9 @@ pub fn me_statuses() -> Service<MeStatuses> {
 ///
 /// POST
 /// ```rust
-/// # use annis::{Client, Method};
+/// # use annis::{Client, Method, Error};
 /// #
-/// # fn post() -> Result<(), String> {
+/// # fn post() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let records = annis::me_records(Method::POST, 5013).params(vec![("episode_id", "5013"), ("rating", "5")]);
@@ -742,9 +736,9 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// ```
 /// PATCH
 /// ```rust
-/// # use annis::{Client, Method};
+/// # use annis::{Client, Method, Error};
 /// #
-/// # fn patch() -> Result<(), String> {
+/// # fn patch() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let records = annis::me_records(Method::PATCH, 1838569).params(vec![("rating", "5")]);
@@ -758,9 +752,9 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// ****************
 /// POST
 /// ```rust
-/// # use annis::{Client, Method};
+/// # use annis::{Client, Method, Error};
 /// #
-/// # fn post() -> Result<(), String> {
+/// # fn post() -> Result<(), Error> {
 /// use annis::MeRecords::*;
 ///
 /// let client = Client::set_token("annict_access_token");
@@ -773,9 +767,9 @@ pub fn me_statuses() -> Service<MeStatuses> {
 /// ```
 /// PATCH
 /// ```rust
-/// # use annis::{Client, Method};
+/// # use annis::{Client, Method, Error};
 /// #
-/// # fn patch() -> Result<(), String> {
+/// # fn patch() -> Result<(), Error> {
 /// use annis::MeRecords::*;
 ///
 /// let client = Client::set_token("annict_access_token");
@@ -820,9 +814,9 @@ pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
 /// Examples
 /// ========
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let me_works = annis::me_works().params(vec![("filter_title","機動戦士ガンダムUC")]);
@@ -833,9 +827,9 @@ pub fn me_records(method: Method, id: usize) -> Service<MeRecords> {
 /// ```
 /// using enum code
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// use annis::MeWorks::*;
 ///
 /// let client = Client::set_token("annict_access_token");
@@ -862,9 +856,9 @@ pub fn me_works() -> Service<MeWorks> {
 /// ========
 ///
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// let client = Client::set_token("annict_access_token");
 ///
 /// let programs = annis::me_programs().params(vec![("field", "id, title")]);
@@ -875,9 +869,9 @@ pub fn me_works() -> Service<MeWorks> {
 /// ```
 /// using enum code
 /// ```rust
-/// # use annis::Client;
+/// # use annis::{Client, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// use annis::MePrograms::*;
 ///
 /// let client = Client::set_token("annict_access_token");

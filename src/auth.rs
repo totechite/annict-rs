@@ -45,9 +45,9 @@ impl OAuth {
     /// Examples
     /// ========
     /// ```rust
-    /// # use annis::{Client, OAuth};
+    /// # use annis::{Client, OAuth, Error};
     /// #
-    /// # fn run() -> Result<(), String> {
+    /// # fn run() -> Result<(), Error> {
     /// let client = Client::set_token("annict_access_token");
     ///
     /// let info = OAuth::info();
@@ -70,9 +70,9 @@ impl OAuth {
     /// Examples
     /// ========
     /// ```rust
-    /// # use annis::{Client, OAuth};
+    /// # use annis::{Client, OAuth, Error};
     /// #
-    /// # fn run() -> Result<(), String> {
+    /// # fn run() -> Result<(), Error> {
     /// let client = Client::set_token("annict_access_token");
     ///
     /// let revoke = OAuth::revoke("revoke_access_token");

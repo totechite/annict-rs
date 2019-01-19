@@ -7,9 +7,9 @@ use std::cmp::PartialEq;
 /// Examples
 /// ========
 /// ```rust
-/// # use annis::{Client, Value};
+/// # use annis::{Client, Value, Error};
 /// #
-/// # fn run() -> Result<(), String> {
+/// # fn run() -> Result<(), Error> {
 /// let client = Client::set_token("access_token");
 /// let res = client.call(annis::works())?.json()?;
 /// #   Ok(())

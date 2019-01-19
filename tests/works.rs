@@ -6,14 +6,14 @@ use std::env;
 fn vannila_request() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let works = annis::works();
-    client.call(works).unwrap();
+    client.call(works).unwrap().json::<Value>().unwrap();
 }
 
 #[test]
 fn filter_title() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let works = annis::works().params(vec![(Works::filter_title, "lain")]);
-    let json = client.call(works).unwrap();
+    let json = client.call(works).unwrap().json::<Value>().unwrap();
     assert_eq!(
         json["works"][0]["title"],
         "serial experiments lain".to_string()
@@ -24,7 +24,7 @@ fn filter_title() {
 fn filter_ids() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let works = annis::works().params(vec![("filter_ids", "860")]);
-    let json = client.call(works).unwrap();
+    let json = client.call(works).unwrap().json::<Value>().unwrap();
     assert_eq!(
         json["works"][0]["title"],
         "serial experiments lain".to_string()
@@ -32,7 +32,7 @@ fn filter_ids() {
 
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let works = annis::works().params(vec![("filter_ids", "0")]);
-    let json = client.call(works).unwrap();
+    let json = client.call(works).unwrap().json::<Value>().unwrap();
     assert_eq!(json["works"][0]["title"], Value::Null);
 }
 

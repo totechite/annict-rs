@@ -1,5 +1,5 @@
 extern crate annis;
-use annis::{Client, Method};
+use annis::{Client, Method, Value};
 use std::env;
 
 #[test]
@@ -10,7 +10,7 @@ fn me_works() {
 
     let client = Client::set_token(env::var("annict_access_token").unwrap());
     let me_works = annis::me_works().params(vec![("filter_title", "UC")]);
-    let json = client.call(me_works).unwrap();
+    let json = client.call(me_works).unwrap().json::<Value>().unwrap();
     assert_eq!(
         json["works"][0]["title"],
         "機動戦士ガンダムUC（ユニコーン） RE:0096".to_string()
