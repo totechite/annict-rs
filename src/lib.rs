@@ -8,17 +8,17 @@
 //!
 //! Usage
 //! --------------------
-//! Request to /v1/works
-//! ```rust
+//! Example: Request to /v1/works
+//! ```no_run
 //! # extern crate annis;
 //! # use annis::{Client, Works, Error, Value};
 //! # use std::env;
-//! #
+//! # 
 //! # fn main() -> Result<(), Error>{
 //! #
 //! let client = Client::set_token("annict_access_token");
 //!
-//! let params = vec![(Works::filter_title, "lain"),(Works::fields,"title")];
+//! let params = vec![(Works::filter_title, "lain"),(Works::fields, "title")];
 //! let works = annis::works().params(params);
 //!
 //! let json = client.call(works)?.json::<Value>()?;
@@ -1224,7 +1224,7 @@ impl fmt::Display for MePrograms {
 
 #[derive(Fail, Debug)]
 pub enum ErrorKind {
-    #[fail(display = "error: Invalid value at token or request parameters")]
+    #[fail(display = "Invalid value at token or request parameters")]
     InvalidValue,
 }
 
