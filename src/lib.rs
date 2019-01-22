@@ -1221,6 +1221,9 @@ impl fmt::Display for MePrograms {
 }
 
 
+/// Request to /v1/people   
+/// .params() assepts `People` enum.
+
 pub fn people() -> Service<People>{
     Service{
         method: reqwest::Method::GET,
@@ -1229,6 +1232,8 @@ pub fn people() -> Service<People>{
     }
 }
 
+/// used by people() function   
+/// /v1/people assepts parameters.
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -1272,6 +1277,9 @@ impl fmt::Display for People {
     }
 }
 
+/// Request to /v1/organizations   
+/// .params() assepts `Organizations` enum.
+
 pub fn organizations() -> Service<Organizations>{
     Service{
         method: reqwest::Method::GET,
@@ -1279,6 +1287,9 @@ pub fn organizations() -> Service<Organizations>{
         params: None,
     }
 }
+
+/// used by organizations() function   
+/// /v1/organizations assepts parameters.
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -1322,6 +1333,9 @@ impl fmt::Display for Organizations {
     }
 }
 
+/// Request to /v1/series   
+/// .params() assepts `Series` enum.
+
 pub fn series() -> Service<Series>{
     Service{
         method: reqwest::Method::GET,
@@ -1329,6 +1343,9 @@ pub fn series() -> Service<Series>{
         params: None,
     }
 }
+
+/// used by series() function   
+/// /v1/series assepts parameters.
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -1372,13 +1389,19 @@ impl fmt::Display for Series {
     }
 }
 
+/// Request to /v1/characters   
+/// .params() assepts `Characters` enum.
+
 pub fn characters() -> Service<Characters>{
     Service{
         method: reqwest::Method::GET,
-        url: "https://api.annict.com/v1/charcters".to_string(),
+        url: "https://api.annict.com/v1/characters".to_string(),
         params: None,
     }
 }
+
+/// used by characters() function   
+/// /v1/characters assepts parameters.
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -1422,6 +1445,9 @@ impl fmt::Display for Characters {
     }
 }
 
+/// Request to /v1/casts   
+/// .params() assepts `Casts` enum.
+
 pub fn casts() -> Service<Casts>{
     Service{
         method: reqwest::Method::GET,
@@ -1429,6 +1455,9 @@ pub fn casts() -> Service<Casts>{
         params: None,
     }
 }
+
+/// used by casts() function   
+/// /v1/casts assepts parameters.
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -1473,6 +1502,9 @@ impl fmt::Display for Casts {
     }
 }
 
+/// Request to /v1/staffs   
+/// .params() assepts `Staffs` enum.
+
 pub fn staffs() -> Service<Staffs>{
     Service{
         method: reqwest::Method::GET,
@@ -1480,6 +1512,9 @@ pub fn staffs() -> Service<Staffs>{
         params: None,
     }
 }
+
+/// used by staffs() function   
+/// /v1/staffs assepts parameters.
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
