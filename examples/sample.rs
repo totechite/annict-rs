@@ -1,5 +1,5 @@
 extern crate annis;
-use annis::{Client, Works::*, Error};
+use annis::{Client, Works::*, Error, Value};
 use std::env;
 
 fn main() -> Result<(), Error> {
@@ -7,7 +7,7 @@ fn main() -> Result<(), Error> {
 
     let params = vec![(filter_title, "lain"), (fields, "title")];
     let works = annis::works().params(params);
-    let json = client.call(works)?;
+    let json = client.call(works)?.json::<Value>()?;
     println!("{:?}", json);
 
     Ok(())
