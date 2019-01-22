@@ -13,7 +13,7 @@
 //! # extern crate annis;
 //! # use annis::{Client, Works, Error, Value};
 //! # use std::env;
-//! # 
+//! #
 //! # fn main() -> Result<(), Error>{
 //! #
 //! let client = Client::set_token("annict_access_token");
@@ -1220,6 +1220,309 @@ impl fmt::Display for MePrograms {
     }
 }
 
+
+pub fn people() -> Service<People>{
+    Service{
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/people".to_string(),
+        params: None,
+    }
+}
+
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum People {
+    fields,
+    filter_ids,
+    filter_name,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for People {
+    fn is_valid(&self) -> bool {
+        *self != People::Invalid
+    }
+}
+
+impl From<People> for String {
+    fn from(p: People) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for People {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(People::Invalid)
+    }
+}
+
+impl From<String> for People {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(People::Invalid)
+    }
+}
+
+impl fmt::Display for People {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+pub fn organizations() -> Service<Organizations>{
+    Service{
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/organizations".to_string(),
+        params: None,
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Organizations {
+    fields,
+    filter_ids,
+    filter_name,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Organizations {
+    fn is_valid(&self) -> bool {
+        *self != Organizations::Invalid
+    }
+}
+
+impl From<Organizations> for String {
+    fn from(p: Organizations) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Organizations {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Organizations::Invalid)
+    }
+}
+
+impl From<String> for Organizations {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Organizations::Invalid)
+    }
+}
+
+impl fmt::Display for Organizations {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+pub fn series() -> Service<Series>{
+    Service{
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/series".to_string(),
+        params: None,
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Series {
+    fields,
+    filter_ids,
+    filter_name,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Series {
+    fn is_valid(&self) -> bool {
+        *self != Series::Invalid
+    }
+}
+
+impl From<Series> for String {
+    fn from(p: Series) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Series {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Series::Invalid)
+    }
+}
+
+impl From<String> for Series {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Series::Invalid)
+    }
+}
+
+impl fmt::Display for Series {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+pub fn characters() -> Service<Characters>{
+    Service{
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/charcters".to_string(),
+        params: None,
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Characters {
+    fields,
+    filter_ids,
+    filter_name,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Characters {
+    fn is_valid(&self) -> bool {
+        *self != Characters::Invalid
+    }
+}
+
+impl From<Characters> for String {
+    fn from(p: Characters) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Characters {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Characters::Invalid)
+    }
+}
+
+impl From<String> for Characters {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Characters::Invalid)
+    }
+}
+
+impl fmt::Display for Characters {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+pub fn casts() -> Service<Casts>{
+    Service{
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/casts".to_string(),
+        params: None,
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Casts {
+    fields,
+    filter_ids,
+    filter_work_id,
+    page,
+    per_page,
+    sort_id,
+    sort_sort_number,
+    Invalid,
+}
+
+impl IsValid for Casts {
+    fn is_valid(&self) -> bool {
+        *self != Casts::Invalid
+    }
+}
+
+impl From<Casts> for String {
+    fn from(p: Casts) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Casts {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Casts::Invalid)
+    }
+}
+
+impl From<String> for Casts {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Casts::Invalid)
+    }
+}
+
+impl fmt::Display for Casts {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+pub fn staffs() -> Service<Staffs>{
+    Service{
+        method: reqwest::Method::GET,
+        url: "https://api.annict.com/v1/staffs".to_string(),
+        params: None,
+    }
+}
+
+#[allow(non_camel_case_types)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+pub enum Staffs {
+    fields,
+    filter_ids,
+    filter_name,
+    page,
+    per_page,
+    sort_id,
+    Invalid,
+}
+
+impl IsValid for Staffs {
+    fn is_valid(&self) -> bool {
+        *self != Staffs::Invalid
+    }
+}
+
+impl From<Staffs> for String {
+    fn from(p: Staffs) -> String {
+        serde_json::to_string(&p).unwrap_or(String::from("invalid parameter"))
+    }
+}
+
+impl From<&'static str> for Staffs {
+    fn from(p: &'static str) -> Self {
+        serde_yaml::from_str(p).unwrap_or(Staffs::Invalid)
+    }
+}
+
+impl From<String> for Staffs {
+    fn from(p: String) -> Self {
+        serde_yaml::from_str(p.as_str()).unwrap_or(Staffs::Invalid)
+    }
+}
+
+impl fmt::Display for Staffs {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 // -------------------------------------------------
 
 #[derive(Fail, Debug)]
@@ -1285,4 +1588,3 @@ impl From<reqwest::Error> for Error {
         }
     }
 }
-
