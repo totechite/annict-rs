@@ -1,7 +1,7 @@
 annict-rs
 ==============
 [![Build Status](https://travis-ci.com/totechite/annict-rs.svg?branch=master)](https://travis-ci.com/totechite/annict-rs)
-[![Build status](https://ci.appveyor.com/api/projects/status/f39tjurl4m7ggkch?svg=true)](https://ci.appveyor.com/project/totechite/annict-rs)
+[![Build status](https://ci.appveyor.com/api/projects/status/f39tjurl4m7ggkch/branch/master?svg=true)](https://ci.appveyor.com/project/totechite/annict-rs/branch/master)
 [![crates.io](https://img.shields.io/crates/v/annis.svg)](https://crates.io/crates/annis)     
 
 Annict API client library for Rust. 
@@ -20,7 +20,7 @@ Usage
 Add this to your `Cargo.toml`:   
 ```toml
 [dependencies]
-annis = "0.0.4"
+annis = "0.0.5"
 ```
 and this to your crate root:   
 ```rust
@@ -30,9 +30,9 @@ extern crate annis;
 Here is a example code that the process from obtaining `access_token` until making a request for /v1/works.   
 ```rust
 extern crate annis;
-use annis::{OAuth, Client, Works};
+use annis::{OAuth, Client, Works, Value, Error};
 
-fn main(){
+fn main() -> Result<(), Error> {
 
 	let auth = OAuth::client_id("client_id");
 	let url = &auth.authorize_url().redirect_uri("https://example.com").scope("read+write").build();
@@ -49,9 +49,11 @@ fn main(){
 	let client = Client::set_token(access_token);
 	let works = annis::works().params(vec![(Works::filter_title, "lain")]);
 
-	let json = client.call(works).unwrap();
+	let json = client.call(works)?.json::<Value>()?;
 
 	assert_eq!(json["works"][0]["title"], "serial experiments lain".to_string());
+
+	Ok(())
 }
 ```
 

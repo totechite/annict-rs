@@ -1,3 +1,8 @@
+v0.0.5
+--------------
+- Changed the return value at Client.call() Result<Value, String> to Result<Response, Error>.
+- Added functions. `people` `organizations` `series` `characters` `casts` `staffs`
+
 v0.0.4
 ---------------
 - Fix accesstoken include query.
