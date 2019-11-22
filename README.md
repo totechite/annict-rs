@@ -4,6 +4,8 @@ annict-rs
 [![Build status](https://ci.appveyor.com/api/projects/status/f39tjurl4m7ggkch/branch/master?svg=true)](https://ci.appveyor.com/project/totechite/annict-rs/branch/master)
 [![crates.io](https://img.shields.io/crates/v/annis.svg)](https://crates.io/crates/annis)     
 
+日本語: [README-ja.md](./README-ja.md)    
+
 Annict API client library for Rust. 
 
 - [Annict API Official Document](https://docs.annict.com/)
