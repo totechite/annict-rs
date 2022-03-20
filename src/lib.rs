@@ -29,19 +29,17 @@
 //! # }
 //! ```
 
-extern crate reqwest;
+
 use std::fmt;
-#[macro_use]
-extern crate serde_derive;
 
-extern crate serde;
-extern crate serde_json;
-extern crate serde_yaml;
-
-extern crate failure;
+use reqwest;
+use serde::{Serialize, Deserialize};
+use serde_json;
+use failure;
 
 mod auth;
 mod client;
+pub mod nonblocking;
 
 pub use crate::auth::*;
 pub use crate::client::Client;
@@ -137,13 +135,13 @@ impl From<Reviews> for String {
 
 impl From<&'static str> for Reviews {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Reviews::Invalid)
+        serde_json::from_str(p).unwrap_or(Reviews::Invalid)
     }
 }
 
 impl From<String> for Reviews {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Reviews::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Reviews::Invalid)
     }
 }
 
@@ -192,13 +190,13 @@ impl From<Users> for String {
 
 impl From<&'static str> for Users {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Users::Invalid)
+        serde_json::from_str(p).unwrap_or(Users::Invalid)
     }
 }
 
 impl From<String> for Users {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Users::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Users::Invalid)
     }
 }
 
@@ -247,13 +245,13 @@ impl From<Following> for String {
 
 impl From<&'static str> for Following {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Following::Invalid)
+        serde_json::from_str(p).unwrap_or(Following::Invalid)
     }
 }
 
 impl From<String> for Following {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Following::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Following::Invalid)
     }
 }
 
@@ -302,13 +300,13 @@ impl From<Followers> for String {
 
 impl From<&'static str> for Followers {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Followers::Invalid)
+        serde_json::from_str(p).unwrap_or(Followers::Invalid)
     }
 }
 
 impl From<String> for Followers {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Followers::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Followers::Invalid)
     }
 }
 
@@ -356,13 +354,13 @@ impl From<Activities> for String {
 
 impl From<&'static str> for Activities {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Activities::Invalid)
+        serde_json::from_str(p).unwrap_or(Activities::Invalid)
     }
 }
 
 impl From<String> for Activities {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Activities::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Activities::Invalid)
     }
 }
 
@@ -406,13 +404,13 @@ impl From<Me> for String {
 
 impl From<&'static str> for Me {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Me::Invalid)
+        serde_json::from_str(p).unwrap_or(Me::Invalid)
     }
 }
 
 impl From<String> for Me {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Me::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Me::Invalid)
     }
 }
 
@@ -476,13 +474,13 @@ impl From<MeReviews> for String {
 
 impl From<&'static str> for MeReviews {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(MeReviews::Invalid)
+        serde_json::from_str(p).unwrap_or(MeReviews::Invalid)
     }
 }
 
 impl From<String> for MeReviews {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(MeReviews::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(MeReviews::Invalid)
     }
 }
 
@@ -531,13 +529,13 @@ impl From<MeFollowing_activities> for String {
 
 impl From<&'static str> for MeFollowing_activities {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(MeFollowing_activities::Invalid)
+        serde_json::from_str(p).unwrap_or(MeFollowing_activities::Invalid)
     }
 }
 
 impl From<String> for MeFollowing_activities {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(MeFollowing_activities::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(MeFollowing_activities::Invalid)
     }
 }
 
@@ -927,13 +925,13 @@ impl From<Works> for String {
 
 impl From<&'static str> for Works {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Works::Invalid)
+        serde_json::from_str(p).unwrap_or(Works::Invalid)
     }
 }
 
 impl From<String> for Works {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Works::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Works::Invalid)
     }
 }
 
@@ -973,13 +971,13 @@ impl From<Episodes> for String {
 
 impl From<&'static str> for Episodes {
     fn from(p: &'static str) -> Episodes {
-        serde_yaml::from_str(p).unwrap_or(Episodes::Invalid)
+        serde_json::from_str(p).unwrap_or(Episodes::Invalid)
     }
 }
 
 impl From<String> for Episodes {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Episodes::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Episodes::Invalid)
     }
 }
 
@@ -1019,13 +1017,13 @@ impl From<Records> for String {
 
 impl From<&'static str> for Records {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Records::Invalid)
+        serde_json::from_str(p).unwrap_or(Records::Invalid)
     }
 }
 
 impl From<String> for Records {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Records::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Records::Invalid)
     }
 }
 
@@ -1060,13 +1058,13 @@ impl From<MeStatuses> for String {
 
 impl From<&'static str> for MeStatuses {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(MeStatuses::Invalid)
+        serde_json::from_str(p).unwrap_or(MeStatuses::Invalid)
     }
 }
 
 impl From<String> for MeStatuses {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(MeStatuses::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(MeStatuses::Invalid)
     }
 }
 
@@ -1104,13 +1102,13 @@ impl From<MeRecords> for String {
 
 impl From<&'static str> for MeRecords {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(MeRecords::Invalid)
+        serde_json::from_str(p).unwrap_or(MeRecords::Invalid)
     }
 }
 
 impl From<String> for MeRecords {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(MeRecords::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(MeRecords::Invalid)
     }
 }
 
@@ -1153,13 +1151,13 @@ impl From<MeWorks> for String {
 
 impl From<&'static str> for MeWorks {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(MeWorks::Invalid)
+        serde_json::from_str(p).unwrap_or(MeWorks::Invalid)
     }
 }
 
 impl From<String> for MeWorks {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(MeWorks::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(MeWorks::Invalid)
     }
 }
 
@@ -1204,13 +1202,13 @@ impl From<MePrograms> for String {
 
 impl From<&'static str> for MePrograms {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(MePrograms::Invalid)
+        serde_json::from_str(p).unwrap_or(MePrograms::Invalid)
     }
 }
 
 impl From<String> for MePrograms {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(MePrograms::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(MePrograms::Invalid)
     }
 }
 
@@ -1261,13 +1259,13 @@ impl From<People> for String {
 
 impl From<&'static str> for People {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(People::Invalid)
+        serde_json::from_str(p).unwrap_or(People::Invalid)
     }
 }
 
 impl From<String> for People {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(People::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(People::Invalid)
     }
 }
 
@@ -1317,13 +1315,13 @@ impl From<Organizations> for String {
 
 impl From<&'static str> for Organizations {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Organizations::Invalid)
+        serde_json::from_str(p).unwrap_or(Organizations::Invalid)
     }
 }
 
 impl From<String> for Organizations {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Organizations::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Organizations::Invalid)
     }
 }
 
@@ -1373,13 +1371,13 @@ impl From<Series> for String {
 
 impl From<&'static str> for Series {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Series::Invalid)
+        serde_json::from_str(p).unwrap_or(Series::Invalid)
     }
 }
 
 impl From<String> for Series {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Series::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Series::Invalid)
     }
 }
 
@@ -1429,13 +1427,13 @@ impl From<Characters> for String {
 
 impl From<&'static str> for Characters {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Characters::Invalid)
+        serde_json::from_str(p).unwrap_or(Characters::Invalid)
     }
 }
 
 impl From<String> for Characters {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Characters::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Characters::Invalid)
     }
 }
 
@@ -1486,13 +1484,13 @@ impl From<Casts> for String {
 
 impl From<&'static str> for Casts {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Casts::Invalid)
+        serde_json::from_str(p).unwrap_or(Casts::Invalid)
     }
 }
 
 impl From<String> for Casts {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Casts::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Casts::Invalid)
     }
 }
 
@@ -1542,13 +1540,13 @@ impl From<Staffs> for String {
 
 impl From<&'static str> for Staffs {
     fn from(p: &'static str) -> Self {
-        serde_yaml::from_str(p).unwrap_or(Staffs::Invalid)
+        serde_json::from_str(p).unwrap_or(Staffs::Invalid)
     }
 }
 
 impl From<String> for Staffs {
     fn from(p: String) -> Self {
-        serde_yaml::from_str(p.as_str()).unwrap_or(Staffs::Invalid)
+        serde_json::from_str(p.as_str()).unwrap_or(Staffs::Invalid)
     }
 }
 
@@ -1577,7 +1575,7 @@ pub struct Error {
 }
 
 impl Fail for Error {
-    fn cause(&self) -> Option<&Fail> {
+    fn cause(&self) -> Option<&dyn Fail> {
         self.inner.cause()
     }
 
