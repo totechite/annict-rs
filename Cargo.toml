@@ -1,7 +1,7 @@
 [package]
 name = "annis"
-version = "0.0.5"
-authors = ["totechite <yutan.h9@gmail.com>"]
+version = "0.0.6"
+authors = ["totechite <yusuke.kataoka09@gmail.com>"]
 description = "Annict API client library"
 documentation = "https://docs.rs/annis"
 repository = "https://github.com/totechite/annict-rs"
@@ -16,9 +16,14 @@ appveyor = { repository = "totechite/annict-rs", branch = "master", service = "g
 travis-ci = { repository = "totechite/annict-rs", branch = "master" }
 
 [dependencies]
-reqwest = "0.9.5"
-serde = "1.0"
-serde_derive = "1.0"
+futures = "0.3"
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-serde_yaml = "0.8"
 failure = "0.1.5"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros"] }
+
+[profile.release]
+lto = true
