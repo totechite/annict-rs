@@ -1,5 +1,11 @@
 v0.0.5
 --------------
+- Add Asynchronous request.
+- Added module. `nonblocking`
+- Added struct. `nonblocking::Client` `nonblocking::OAuth`
+
+v0.0.5
+--------------
 - Changed the return value at Client.call() Result<Value, String> to Result<Response, Error>.
 - Added functions. `people` `organizations` `series` `characters` `casts` `staffs`
 

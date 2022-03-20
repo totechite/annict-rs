@@ -8,7 +8,7 @@ fn main() -> Result<(), Error> {
     let params = vec![(filter_ids, "26233"), (fields, "name")];
     let characters = annis::characters().params(params);
     let json = client.call(characters)?.json::<Value>()?;
-    println!("{:?}", json["characters"][0]["name"]);
+    println!("{}", json["characters"][0]["name"].as_str().unwrap());
 
     Ok(())
 }

@@ -1,4 +1,5 @@
 use crate::{Service, Error};
+use reqwest::blocking::{Client as SyncClinet};
 use serde::Serialize;
 use std::cmp::PartialEq;
 
@@ -31,11 +32,11 @@ impl Client {
         }
     }
 
-    pub fn call<K>(&self, service: Service<K>) -> Result<reqwest::Response, Error>
+    pub fn call<K>(&self, service: Service<K>) -> Result<reqwest::blocking::Response, Error>
     where
         K: Serialize + Into<String> + PartialEq,
     {
-        let mut client = reqwest::Client::new()
+        let mut client = SyncClinet::new()
             .request(service.method, service.url.as_str())
             .query(&vec![("access_token", self.clone().token)]);
         if let Some(params) = service.params {

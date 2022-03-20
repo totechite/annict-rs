@@ -1,5 +1,6 @@
 use crate::Service;
-use reqwest::{Client, Method, Url};
+use reqwest::{Method, Url};
+use reqwest::blocking::{Client};
 use serde_json::Value;
 
 /// A make request to autholize.

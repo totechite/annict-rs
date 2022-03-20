@@ -12,11 +12,11 @@ fn vannila_request() {
 #[test]
 fn filter_title() {
     let client = Client::set_token(env::var("annict_access_token").unwrap());
-    let works = annis::works().params(vec![(Works::filter_title, "lain")]);
+    let works = annis::works().params(vec![(Works::filter_title, "CENCOROLL")]);
     let json = client.call(works).unwrap().json::<Value>().unwrap();
     assert_eq!(
         json["works"][0]["title"],
-        "serial experiments lain".to_string()
+        "CENCOROLL -センコロール-".to_string()
     );
 }
 
